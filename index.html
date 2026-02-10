@@ -35,14 +35,35 @@
                     <span style="display:block; margin-top:15px; color:var(--primary); font-weight:700; font-style:normal; font-size:1.5rem;">Rain Justin</span>
                     Every creation is a reflection of the eternal love and light he brought into our lives."
                 </p>
+
+                <div class="social-links">
+                    <span class="reach-us-text">Reach us:</span>
+                    <a href="https://apps.samsung.com/theme/SellerProductList.as?id=000000059112" target="_blank">
+                        <img src="img/samsung_logo.png" alt="Samsung Store" class="social-icon">
+                    </a>
+                    <a href="https://www.facebook.com/dcbraininheaven" target="_blank">
+                        <img src="img/facebook_logo.png" alt="Facebook" class="social-icon">
+                    </a>
+                    <a href="https://www.youtube.com/c/RainHeaven" target="_blank">
+                        <img src="img/youtube_logo.png" alt="YouTube" class="social-icon">
+                    </a>
                 </div>
+
+                <div class="contact-area">
+                    <small style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; color: var(--primary); font-weight: 700;">Samsung Developer</small>
+                    <span class="maker-name">Greta Rose Q. Sebua</span>
+                    <div class="contact-links">
+                        <a href="tel:09162192794" class="phone-number">0916 219 2794</a>
+                        <a href="mailto:gsebua@gmail.com" class="email">gsebua@gmail.com</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
     <footer>&copy; 2026 Rain In Heaven Creations</footer>
 
     <script>
-        // FETCH THEMES FROM CLOUDFLARE D1
         async function loadThemes() {
             try {
                 const response = await fetch('/api/themes');
@@ -77,9 +98,7 @@
             window.scrollTo({ top: 400, behavior: 'smooth' });
         }
 
-        // Run on load
         loadThemes();
     </script>
 </body>
-
 </html>
