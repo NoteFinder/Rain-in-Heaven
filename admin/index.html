@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rain In Heaven | Admin</title>
+    <link rel="stylesheet" href="../style.css"> </head>
+<body style="padding: 50px; display: flex; flex-direction: column; align-items: center;">
+
+    <div id="login-box" class="about-card" style="max-width: 400px; text-align: center;">
+        <h2 style="color: var(--primary);">Admin Access</h2>
+        <input type="password" id="pass" placeholder="Enter Password" style="padding: 10px; border-radius: 10px; border: 1px solid var(--primary); width: 80%;">
+        <button onclick="checkPass()" class="tab-btn active" style="margin-top: 20px;">Login</button>
+    </div>
+
+    <div id="admin-panel" style="display: none; width: 100%; max-width: 600px;" class="about-card">
+        <h2 style="color: var(--primary);">Add New Theme</h2>
+        <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" id="name" placeholder="Theme Name" required>
+            <input type="text" id="desc" placeholder="Short Description" required>
+            <input type="text" id="imgUrl" placeholder="Image URL (e.g., img/pajama.jpg)" required>
+            <input type="text" id="storeLink" placeholder="Store Link" required>
+            <button type="submit" class="tab-btn active">Add Theme</button>
+        </form>
+        <p id="status"></p>
+    </div>
+
+    <script>
+        function checkPass() {
+            const pass = document.getElementById('pass').value;
+            if (pass === "021603") {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+            } else { alert("Wrong Password"); }
+        }
+
+        document.getElementById('themeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const status = document.getElementById('status');
+            status.innerText = "Saving...";
+
+            const data = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('desc').value,
+                image: document.getElementById('imgUrl').value,
+                link: document.getElementById('storeLink').value
+            };
+
+            const res = await fetch('/api/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                status.innerText = "Success! Theme added.";
+                e.target.reset();
+            } else { status.innerText = "Error saving theme."; }
+        };
+    </script>
+</body>
+</html>
