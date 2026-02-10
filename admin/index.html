@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Rain In Heaven | Admin</title>
-    <link rel="stylesheet" href="../style.css"> </head>
+    <link rel="stylesheet" href="../style.css">
+</head>
 <body style="padding: 50px; display: flex; flex-direction: column; align-items: center;">
-
     <div id="login-box" class="about-card" style="max-width: 400px; text-align: center;">
         <h2 style="color: var(--primary);">Admin Access</h2>
         <input type="password" id="pass" placeholder="Enter Password" style="padding: 10px; border-radius: 10px; border: 1px solid var(--primary); width: 80%;">
@@ -21,13 +21,12 @@
             <input type="text" id="storeLink" placeholder="Store Link" required>
             <button type="submit" class="tab-btn active">Add Theme</button>
         </form>
-        <p id="status"></p>
+        <p id="status" style="margin-top: 15px;"></p>
     </div>
 
     <script>
         function checkPass() {
-            const pass = document.getElementById('pass').value;
-            if (pass === "021603") {
+            if (document.getElementById('pass').value === "021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
             } else { alert("Wrong Password"); }
@@ -36,7 +35,7 @@
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const status = document.getElementById('status');
-            status.innerText = "Saving...";
+            status.innerText = "Adding theme...";
 
             const data = {
                 name: document.getElementById('name').value,
@@ -52,9 +51,9 @@
             });
 
             if (res.ok) {
-                status.innerText = "Success! Theme added.";
+                status.innerText = "Success! Refresh your main site to see it.";
                 e.target.reset();
-            } else { status.innerText = "Error saving theme."; }
+            } else { status.innerText = "Error: Make sure your D1 binding is set."; }
         };
     </script>
 </body>
