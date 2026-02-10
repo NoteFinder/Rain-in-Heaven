@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designed Creations by Rain In Heaven</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <section class="hero">
+        <img src="img/logo.png" alt="Rain In Heaven Logo" class="hero-logo">
+        <h2>Themes by Rain in Heaven</h2>
+    </section>
+
+    <div class="nav-wrapper">
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
+            <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
+        </nav>
+    </div>
+
+    <main class="container">
+        <div id="themes" class="tab-content active">
+            <div id="themes-gallery" class="gallery">
+                <p style="text-align: center; color: var(--primary); grid-column: span 3;">Loading beautiful themes...</p>
+            </div>
+        </div>
+
+        <div id="home" class="tab-content">
+            <div class="about-card">
+                <h2 style="color:var(--primary); font-weight:300; margin-bottom:25px; font-size: 2rem;">Our Heart & Story</h2>
+                <p style="font-size:1.1rem; line-height:2; color:var(--dark); font-style:italic; max-width:750px; margin:0 auto;">
+                    "Rain in Heaven Themes was born to honor the memory of my beloved son, 
+                    <span style="display:block; margin-top:15px; color:var(--primary); font-weight:700; font-style:normal; font-size:1.5rem;">Rain Justin</span>
+                    Every creation is a reflection of the eternal love and light he brought into our lives."
+                </p>
+                </div>
+        </div>
+    </main>
+
+    <footer>&copy; 2026 Rain In Heaven Creations</footer>
+
+    <script>
+        // FETCH THEMES FROM CLOUDFLARE D1
+        async function loadThemes() {
+            try {
+                const response = await fetch('/api/themes');
+                const themes = await response.json();
+                const gallery = document.getElementById('themes-gallery');
+                
+                if (themes.length === 0) {
+                    gallery.innerHTML = '<p style="grid-column: span 3;">More beauty coming soon...</p>';
+                    return;
+                }
+
+                gallery.innerHTML = themes.map(theme => `
+                    <a href="${theme.link}" target="_blank" class="card">
+                        <div class="card-img" style="background-image: url('${theme.image}')"></div>
+                        <div class="card-body">
+                            <h3>${theme.name}</h3>
+                            <p>${theme.description}</p>
+                            <div class="btn-explore">EXPLORE</div>
+                        </div>
+                    </a>
+                `).join('');
+            } catch (err) {
+                console.error("Failed to load themes:", err);
+            }
+        }
+
+        function switchTab(event, tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+        }
+
+        // Run on load
+        loadThemes();
+    </script>
+</body>
+</html>
