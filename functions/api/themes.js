@@ -2,7 +2,6 @@ export async function onRequest(context) {
   const { env } = context;
 
   try {
-    // Queries the Cloudflare D1 database named 'DB'
     const { results } = await env.DB.prepare(
       "SELECT * FROM themes ORDER BY id DESC"
     ).all();
