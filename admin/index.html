@@ -2,26 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rain In Heaven | Admin</title>
     <link rel="stylesheet" href="../style.css">
 </head>
-<body style="padding: 50px; display: flex; flex-direction: column; align-items: center;">
-    <div id="login-box" class="about-card" style="max-width: 400px; text-align: center;">
+<body style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
+
+    <div id="login-box" class="about-card" style="max-width: 400px; text-align: center; margin-top: 50px;">
         <h2 style="color: var(--primary);">Admin Access</h2>
-        <input type="password" id="pass" placeholder="Enter Password" style="padding: 10px; border-radius: 10px; border: 1px solid var(--primary); width: 80%;">
-        <button onclick="checkPass()" class="tab-btn active" style="margin-top: 20px;">Login</button>
+        <input type="password" id="pass" placeholder="Enter Password" style="padding: 12px; border-radius: 10px; border: 1px solid var(--primary); width: 80%; margin-bottom: 20px;">
+        <button onclick="checkPass()" class="tab-btn active">Login</button>
     </div>
 
-    <div id="admin-panel" style="display: none; width: 100%; max-width: 600px;" class="about-card">
+    <div id="admin-panel" style="display: none; width: 100%; max-width: 700px;" class="about-card">
         <h2 style="color: var(--primary);">Add New Theme</h2>
-        <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px;">
-            <input type="text" id="name" placeholder="Theme Name" required>
-            <input type="text" id="desc" placeholder="Short Description" required>
-            <input type="text" id="imgUrl" placeholder="Image URL (e.g., img/pajama.jpg)" required>
-            <input type="text" id="storeLink" placeholder="Store Link" required>
+        <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px;">
+            <input type="text" id="name" placeholder="Theme Name (e.g., Pajama Party)" required>
+            <input type="text" id="desc" placeholder="Description (e.g., Cozy and dreamy...)" required>
+            <input type="text" id="imgUrl" placeholder="Image Path (e.g., img/pajama.jpg)" required>
+            <input type="text" id="storeLink" placeholder="Samsung Store Link" required>
             <button type="submit" class="tab-btn active">Add Theme</button>
         </form>
-        <p id="status" style="margin-top: 15px;"></p>
+        <p id="status" style="font-weight: bold; margin-bottom: 20px;"></p>
+
+        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 30px 0;">
+
+        <h2 style="color: var(--primary);">Existing Themes</h2>
+        <div id="admin-theme-list" style="text-align: left;">
+            <p>Loading themes...</p>
+        </div>
     </div>
 
     <script>
@@ -29,13 +38,37 @@
             if (document.getElementById('pass').value === "021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
+                loadAdminThemes();
             } else { alert("Wrong Password"); }
+        }
+
+        async function loadAdminThemes() {
+            try {
+                const res = await fetch('/api/themes');
+                const themes = await res.json();
+                const list = document.getElementById('admin-theme-list');
+                
+                if (themes.length === 0) {
+                    list.innerHTML = "<p>No themes found in database.</p>";
+                    return;
+                }
+
+                list.innerHTML = themes.map(t => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid var(--card-border); background:#fff; border-radius:10px; margin-bottom:10px;">
+                        <div>
+                            <strong style="color:var(--primary);">${t.name}</strong><br>
+                            <small style="color:var(--light);">${t.image}</small>
+                        </div>
+                        <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; border-radius:20px; cursor:pointer; padding:8px 15px; font-weight:bold;">Delete</button>
+                    </div>
+                `).join('');
+            } catch (err) { console.error("Load error:", err); }
         }
 
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const status = document.getElementById('status');
-            status.innerText = "Adding theme...";
+            status.innerText = "Processing...";
 
             const data = {
                 name: document.getElementById('name').value,
@@ -51,10 +84,29 @@
             });
 
             if (res.ok) {
-                status.innerText = "Success! Refresh your main site to see it.";
+                status.style.color = "green";
+                status.innerText = "Success! Theme added.";
                 e.target.reset();
-            } else { status.innerText = "Error: Make sure your D1 binding is set."; }
+                loadAdminThemes();
+            } else { 
+                status.style.color = "red";
+                status.innerText = "Error: Ensure DB Binding is set."; 
+            }
         };
+
+        async function deleteTheme(id) {
+            if (!confirm("Are you sure you want to delete this theme?")) return;
+            
+            const res = await fetch('/api/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+
+            if (res.ok) {
+                loadAdminThemes();
+            } else { alert("Error deleting theme."); }
+        }
     </script>
 </body>
 </html>
