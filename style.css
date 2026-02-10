@@ -1,0 +1,47 @@
+:root {
+    --primary: #f8a5c2; 
+    --accent: #ffb6c1; 
+    --dark: #5d5d5d;
+    --light: #a0a0a0;
+    --bg: #fff0f5; /* Blush Pink Background */
+    --card-bg: #fff9fb;
+    --card-border: #fce4ec;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0; padding: 0;
+    background-color: var(--bg);
+    color: var(--dark);
+}
+
+.hero {
+    height: 65vh; min-height: 500px;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('img/background.jpg') center/cover fixed;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    color: white; text-align: center;
+}
+
+.hero-logo { width: 260px; height: auto; margin-bottom: 10px; }
+.hero h2 { font-size: 1.4rem; letter-spacing: 5px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+.nav-wrapper { max-width: 500px; margin: -35px auto 40px; position: relative; z-index: 100; }
+.tabs { background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.tab-btn { border: none; background: none; padding: 12px 25px; font-weight: 700; color: var(--primary); cursor: pointer; border-radius: 40px; }
+.tab-btn.active { background: var(--primary); color: white; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
+.gallery { display: grid; grid-template-columns: repeat(3, 230px); gap: 35px; justify-content: center; }
+
+.card { 
+    background: var(--card-bg); border-radius: 25px; overflow: hidden; text-decoration: none; color: inherit; 
+    transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column;
+}
+.card:hover { transform: translateY(-10px); border-color: var(--primary); }
+
+.card-img { width: 100%; aspect-ratio: 9 / 16; background-size: cover; background-position: center; }
+.card-body { padding: 20px; text-align: center; border-top: 5px solid var(--primary); flex-grow: 1; }
+.card-body h3 { margin: 0 0 8px; color: var(--primary); font-size: 1rem; }
+.btn-explore { color: var(--primary); font-weight: 800; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; }
+
+footer { text-align: center; font-size: 0.8rem; color: var(--dark); opacity: 0.6; margin: 40px 0; }
