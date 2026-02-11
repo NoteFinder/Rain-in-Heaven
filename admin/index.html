@@ -9,30 +9,51 @@
 
     <div id="admin-panel" style="width: 100%; max-width: 700px;" class="about-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-            <h2 style="color: var(--primary); margin: 0;">Admin Dashboard</h2>
-            <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px;">← Return to Site</a>
+            <h2 style="color: var(--primary); margin: 0;">Admin Panel</h2>
+            <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px;">← Back to Site</a>
         </div>
 
         <h3 style="color: var(--primary);">Add Local Theme</h3>
-        <p style="font-size: 0.8rem; color: #666;">Step 1: Upload photo to /img/themes/ on GitHub.<br>Step 2: Enter the exact filename below.</p>
-        
-        <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px;">
+        <form id="themeForm" style="display: flex; flex-direction: column; gap: 12px;">
             <input type="text" id="name" placeholder="Theme Name" required>
             <input type="text" id="desc" placeholder="Description" required>
             <input type="text" id="imageName" placeholder="Filename (e.g. pajama.jpg)" required>
-            <input type="text" id="tryLink" placeholder="Samsung Trial Link" required>
-            <input type="text" id="buyLink" placeholder="Samsung Store Link" required>
-            <button type="submit" class="tab-btn active">Save Theme to Site</button>
+            <input type="text" id="tryLink" placeholder="Trial Link" required>
+            <input type="text" id="buyLink" placeholder="Buy Link" required>
+            <button type="submit" class="tab-btn active">Add Theme</button>
         </form>
-        <p id="status" style="margin-top:15px; font-weight:bold;"></p>
+        <p id="status" style="margin-top:10px; font-weight:bold;"></p>
+
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid var(--card-border);">
+        <h3 style="color: var(--primary);">Manage Themes</h3>
+        <div id="admin-theme-list">Loading...</div>
     </div>
 
     <script>
+        async function loadAdminThemes() {
+            const res = await fetch('/api/themes');
+            const themes = await res.json();
+            const list = document.getElementById('admin-theme-list');
+            list.innerHTML = themes.map(t => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee;">
+                    <span><strong>${t.name}</strong> (${t.image})</span>
+                    <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:5px 12px; border-radius:5px; cursor:pointer;">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        async function deleteTheme(id) {
+            if (confirm("Permanently delete this theme entry?")) {
+                const res = await fetch('/api/delete', {
+                    method: 'POST',
+                    body: JSON.stringify({ id })
+                });
+                if (res.ok) loadAdminThemes();
+            }
+        }
+
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
-            const status = document.getElementById('status');
-            status.innerText = "Saving to database...";
-
             const themeData = {
                 name: document.getElementById('name').value,
                 description: document.getElementById('desc').value,
@@ -40,18 +61,19 @@
                 try_link: document.getElementById('tryLink').value,
                 link: document.getElementById('buyLink').value
             };
-
-            const response = await fetch('/api/add', {
+            const res = await fetch('/api/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(themeData)
             });
-
-            if (response.ok) {
-                status.innerText = "Success! Site updated.";
+            if (res.ok) {
+                document.getElementById('status').innerText = "Added successfully!";
                 e.target.reset();
+                loadAdminThemes();
             }
         };
+
+        loadAdminThemes();
     </script>
 </body>
 </html>
