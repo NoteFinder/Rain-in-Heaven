@@ -3,7 +3,6 @@ export async function onRequestPost(context) {
   try {
     const { name, description, image, link, try_link } = await request.json();
     
-    // Inserts the local filename string into the D1 database
     await env.DB.prepare(
       "INSERT INTO themes (name, description, image, link, try_link) VALUES (?, ?, ?, ?, ?)"
     ).bind(name, description, image, link, try_link).run();
