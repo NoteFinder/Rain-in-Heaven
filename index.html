@@ -75,14 +75,17 @@
                 }
 
                 gallery.innerHTML = themes.map(theme => `
-                    <a href="${theme.link}" target="_blank" class="card">
-                        <div class="card-img" style="background-image: url('${theme.image}')"></div>
+                    <div class="card">
+                        <div class="card-img" style="background-image: url('https://pub-your-id.r2.dev/${theme.image}')"></div>
                         <div class="card-body">
                             <h3>${theme.name}</h3>
                             <p>${theme.description}</p>
-                            <div class="btn-explore">EXPLORE</div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <a href="${theme.try_link}" target="_blank" class="btn-small">TRY</a>
+                                <a href="${theme.link}" target="_blank" class="btn-small primary">BUY</a>
+                            </div>
                         </div>
-                    </a>
+                    </div>
                 `).join('');
             } catch (err) {
                 console.error("Failed to load themes:", err);
@@ -101,5 +104,6 @@
     </script>
 </body>
 </html>
+
 
 
