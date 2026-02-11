@@ -44,16 +44,12 @@
                     <a href="https://www.facebook.com/dcbraininheaven" target="_blank">
                         <img src="img/facebook_logo.png" alt="Facebook" class="social-icon">
                     </a>
-                    <a href="https://www.youtube.com/c/RainHeaven" target="_blank">
-                        <img src="img/youtube_logo.png" alt="YouTube" class="social-icon">
-                    </a>
                 </div>
 
                 <div class="contact-area">
                     <small style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; color: var(--primary); font-weight: 700;">Samsung Developer</small>
                     <span class="maker-name">Greta Rose Q. Sebua</span>
                     <div class="contact-links">
-                        <a href="tel:09162192794" class="phone-number">0916 219 2794</a>
                         <a href="mailto:gsebua@gmail.com" class="email">gsebua@gmail.com</a>
                     </div>
                 </div>
@@ -64,8 +60,7 @@
     <footer>&copy; 2026 Rain In Heaven Creations</footer>
 
     <script>
-        // REPLACE THIS URL WITH YOUR R2 PUBLIC URL FROM SETTINGS
-        const R2_PUBLIC_URL = "https://pub-5d196666af8d4435aaeeb0d14c8977a8.r2.dev"; 
+        const R2_PUBLIC_URL = "https://pub-5d196666af8d4435aaeeb0d14c8977a8.r2.dev/"; 
 
         async function loadThemes() {
             try {
@@ -91,9 +86,7 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) {
-                console.error("Failed to load themes:", err);
-            }
+            } catch (err) { console.error("Error loading themes:", err); }
         }
 
         function switchTab(event, tabId) {
@@ -101,7 +94,6 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
-            window.scrollTo({ top: 400, behavior: 'smooth' });
         }
 
         loadThemes();
