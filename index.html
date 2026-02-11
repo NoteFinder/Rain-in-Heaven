@@ -28,8 +28,7 @@
         </main>
 
     <script>
-        // Use your local GitHub folder path
-        const IMG_PATH = "img/themes/"; 
+        const IMG_PATH = "img/themes/"; // Local folder path
 
         async function loadThemes() {
             try {
@@ -38,7 +37,7 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3; color: var(--primary);">More beauty coming soon...</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; color: var(--primary);">More coming soon!</p>';
                     return;
                 }
 
@@ -55,7 +54,7 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { console.error("Error loading themes:", err); }
+            } catch (err) { console.error("Error:", err); }
         }
 
         function switchTab(event, tabId) {
