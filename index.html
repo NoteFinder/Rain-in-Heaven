@@ -28,7 +28,8 @@
         </main>
 
     <script>
-        const IMG_PATH = "img/"; // Local folder path
+        // Based on your GitHub screenshot, images are in 'img/'
+        const IMG_PATH = "img/"; 
 
         async function loadThemes() {
             try {
@@ -37,7 +38,7 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3; color: var(--primary);">More coming soon!</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">No themes found. Upload them in Admin!</p>';
                     return;
                 }
 
@@ -54,7 +55,7 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { console.error("Error:", err); }
+            } catch (err) { console.error("Error loading gallery:", err); }
         }
 
         function switchTab(event, tabId) {
@@ -67,4 +68,3 @@
     </script>
 </body>
 </html>
-
