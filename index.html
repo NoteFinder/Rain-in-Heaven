@@ -22,30 +22,45 @@
     <main class="container">
         <div id="themes" class="tab-content active">
             <div id="themes-gallery" class="gallery">
-                <p style="text-align: center; color: var(--primary); grid-column: span 3;">Loading themes...</p>
+                <p style="text-align: center; color: var(--primary); grid-column: span 3;">Loading...</p>
             </div>
         </div>
 
         <div id="home" class="tab-content">
-            <div class="about-card">
-                <h2 style="color: var(--primary); margin-bottom: 20px;">Designed Creations by Rain In Heaven</h2>
-                <p>Designed Creations by Rain In Heaven is more than just a brand—it is a labor of love and a tribute to a very special inspiration.</p>
+            <div class="about-card" style="text-align: center; padding: 40px 20px;">
+                <h2 style="color: #ffb6c1; font-size: 2.2rem; margin-bottom: 20px;">Our Heart & Story</h2>
                 
-                <p style="margin-top: 15px; font-weight: bold; font-style: italic; color: var(--primary);">
-                    Dedicated to my son, Rain Justin.
+                <p style="font-style: italic; color: #555; margin-bottom: 20px;">
+                    "Rain in Heaven Themes was born to honor the memory of my beloved son,"
                 </p>
 
-                <p style="margin-top: 15px;">
-                    Every design, color palette, and icon is crafted with the same care and dedication I hold for my son. 
-                    I strive to bring beauty and peace to your digital world, just as Rain has brought light into mine. 
-                    Thank you for supporting this journey.
+                <h3 style="color: #ffb6c1; font-size: 2rem; margin-bottom: 20px; font-weight: bold;">Rain Justin</h3>
+
+                <p style="font-style: italic; color: #555; margin-bottom: 30px;">
+                    "Every creation is a reflection of the eternal love and light he brought into our lives."
                 </p>
+
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
+                    <span style="color: #ffb6c1; font-weight: bold; font-size: 1.1rem;">Reach us:</span>
+                    
+                    <a href="#" target="_blank">
+                        <img src="img/samsung_logo.png" alt="Samsung Store" style="width: 45px; height: 45px;">
+                    </a>
+
+                    <a href="#" target="_blank">
+                        <img src="img/facebook_logo.png" alt="Facebook" style="width: 45px; height: 45px;">
+                    </a>
+
+                    <a href="#" target="_blank">
+                        <img src="img/youtube_logo.png" alt="YouTube" style="width: 45px; height: 45px;">
+                    </a>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        const IMG_PATH = "img/"; // Using local GitHub folder
+        const IMG_PATH = "img/"; // Pulls directly from GitHub img/ folder
 
         async function loadThemes() {
             try {
@@ -54,7 +69,7 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">Coming soon...</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">More beauty coming soon...</p>';
                     return;
                 }
 
@@ -71,10 +86,9 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { console.error("Error loading themes:", err); }
+            } catch (err) { console.error("Error:", err); }
         }
 
-        // Tab Switching Logic
         function switchTab(event, tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
