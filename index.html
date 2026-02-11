@@ -7,10 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <section class="hero">
         <img src="img/logo.png" alt="Rain In Heaven Logo" class="hero-logo">
-        <h2>Themes by Rain in Heaven</h2>
+        <h2>THEMES BY RAIN IN HEAVEN</h2>
     </section>
 
     <div class="nav-wrapper">
@@ -28,39 +27,12 @@
         </div>
 
         <div id="home" class="tab-content">
-            <div class="about-card">
-                <h2 style="color:var(--primary); font-weight:300; margin-bottom:25px; font-size: 2rem;">Our Heart & Story</h2>
-                <p style="font-size:1.1rem; line-height:2; color:var(--dark); font-style:italic; max-width:750px; margin:0 auto;">
-                    "Rain in Heaven Themes was born to honor the memory of my beloved son, 
-                    <span style="display:block; margin-top:15px; color:var(--primary); font-weight:700; font-style:normal; font-size:1.5rem;">Rain Justin</span>
-                    Every creation is a reflection of the eternal love and light he brought into our lives."
-                </p>
-
-                <div class="social-links">
-                    <span class="reach-us-text">Reach us:</span>
-                    <a href="https://apps.samsung.com/theme/SellerProductList.as?id=000000059112" target="_blank">
-                        <img src="img/samsung_logo.png" alt="Samsung Store" class="social-icon">
-                    </a>
-                    <a href="https://www.facebook.com/dcbraininheaven" target="_blank">
-                        <img src="img/facebook_logo.png" alt="Facebook" class="social-icon">
-                    </a>
-                </div>
-
-                <div class="contact-area">
-                    <small style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; color: var(--primary); font-weight: 700;">Samsung Developer</small>
-                    <span class="maker-name">Greta Rose Q. Sebua</span>
-                    <div class="contact-links">
-                        <a href="mailto:gsebua@gmail.com" class="email">gsebua@gmail.com</a>
-                    </div>
-                </div>
             </div>
-        </div>
     </main>
 
-    <footer>&copy; 2026 Rain In Heaven Creations</footer>
-
     <script>
-        const R2_PUBLIC_URL = "https://pub-5d196666af8d4435aaeeb0d14c8977a8.r2.dev/"; 
+        // Your specific URL from image_a72799.png
+        const R2_URL = "https://pub-5d196666af8d4435aaeeb0d14c8977a8.r2.dev/"; 
 
         async function loadThemes() {
             try {
@@ -69,13 +41,13 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3; color: var(--primary);">More beauty coming soon...</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; color: var(--primary);">More coming soon!</p>';
                     return;
                 }
 
                 gallery.innerHTML = themes.map(theme => `
                     <div class="card">
-                        <div class="card-img" style="background-image: url('${R2_PUBLIC_URL}${theme.image}')"></div>
+                        <div class="card-img" style="background-image: url('${R2_URL}${theme.image}')"></div>
                         <div class="card-body">
                             <h3>${theme.name}</h3>
                             <p>${theme.description}</p>
@@ -86,8 +58,9 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { console.error("Error loading themes:", err); }
+            } catch (err) { console.error("Gallery Error:", err); }
         }
+        loadThemes();
 
         function switchTab(event, tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -95,8 +68,6 @@
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
-
-        loadThemes();
     </script>
 </body>
 </html>
