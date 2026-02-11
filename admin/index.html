@@ -14,21 +14,24 @@
     </div>
 
     <div id="admin-panel" style="display: none; width: 100%; max-width: 700px;" class="about-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--card-border); padding-bottom: 15px;">
             <h2 style="color: var(--primary); margin: 0;">Admin Dashboard</h2>
             <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px; font-size: 0.9rem;">
-                ← Return to Site
+                ← Return to Main Page
             </a>
         </div>
 
         <h3 style="color: var(--primary);">Add New Theme</h3>
         <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px;">
             <input type="text" id="name" placeholder="Theme Name" required>
-            <input type="text" id="desc" placeholder="Description" required>
+            <input type="text" id="desc" placeholder="Theme Description" required>
+            
             <label style="text-align:left; color:var(--primary); font-weight:bold;">Upload Image File:</label>
             <input type="file" id="imageFile" accept="image/*" required>
+            
             <input type="text" id="tryLink" placeholder="Samsung Trial Link (Try)" required>
             <input type="text" id="buyLink" placeholder="Samsung Store Link (Buy)" required>
+            
             <button type="submit" class="tab-btn active">Upload & Save Theme</button>
         </form>
         <p id="status" style="margin-top:15px; font-weight:bold;"></p>
@@ -40,6 +43,7 @@
 
     <script>
         function checkPass() {
+            // Your personal password
             if (document.getElementById('pass').value === "021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
@@ -50,16 +54,17 @@
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const status = document.getElementById('status');
-            status.innerText = "Step 1: Uploading to R2...";
+            status.innerText = "Step 1: Uploading image to R2...";
 
             const fileInput = document.getElementById('imageFile');
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
 
+            // Calls your functions/api/upload.js
             const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
             const { path } = await uploadRes.json();
 
-            status.innerText = "Step 2: Saving to Database...";
+            status.innerText = "Step 2: Saving links to Database...";
             const themeData = {
                 name: document.getElementById('name').value,
                 description: document.getElementById('desc').value,
@@ -68,6 +73,7 @@
                 link: document.getElementById('buyLink').value
             };
 
+            // Calls your functions/api/add.js
             const dbRes = await fetch('/api/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -85,9 +91,9 @@
             const res = await fetch('/api/themes');
             const themes = await res.json();
             document.getElementById('admin-theme-list').innerHTML = themes.map(t => `
-                <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid #eee;">
                     <span>${t.name}</span>
-                    <button onclick="deleteTheme(${t.id})" style="background:red; color:white; border:none; padding:5px; cursor:pointer;">Delete</button>
+                    <button onclick="deleteTheme(${t.id})" style="background:red; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:5px;">Delete</button>
                 </div>
             `).join('');
         }
