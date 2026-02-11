@@ -16,41 +16,32 @@
     <div id="admin-panel" style="display: none; width: 100%; max-width: 700px;" class="about-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
             <h2 style="color: var(--primary); margin: 0;">Admin Dashboard</h2>
-            <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px;">← Return to Site</a>
+            <a href="../" style="text-decoration: none; font-weight: bold; color: var(--primary);">← Return to Site</a>
         </div>
 
-        <h3 style="color: var(--primary);">Add Local Theme</h3>
-        <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">
-            1. Upload photo to <strong>/img/</strong> on GitHub.<br>
-            2. Enter the exact filename below (e.g., <em>pajama_party.jpg</em>).
-        </p>
-        
+        <h3>Add New Theme</h3>
         <form id="themeForm" style="display: flex; flex-direction: column; gap: 12px;">
             <input type="text" id="name" placeholder="Theme Name" required>
             <input type="text" id="desc" placeholder="Description" required>
-            <input type="text" id="imageName" placeholder="Filename (e.g. phola_cozy.jpg)" required>
-            <input type="text" id="tryLink" placeholder="Samsung Trial Link" required>
-            <input type="text" id="buyLink" placeholder="Samsung Buy Link" required>
-            <button type="submit" class="tab-btn active">Save Theme to Site</button>
+            <input type="text" id="imageName" placeholder="Filename (e.g. pajama_party.jpg)" required>
+            <input type="text" id="tryLink" placeholder="Trial Link" required>
+            <input type="text" id="buyLink" placeholder="Buy Link" required>
+            <button type="submit" class="tab-btn active">Save to Database</button>
         </form>
-        <p id="status" style="margin-top:15px; font-weight:bold;"></p>
+        <p id="status" style="margin-top:10px; font-weight:bold;"></p>
 
         <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
-        <h3 style="color: var(--primary);">Manage Current Themes</h3>
+        <h3>Live Themes</h3>
         <div id="admin-theme-list">Loading...</div>
     </div>
 
     <script>
-        // Password Protection logic
         function checkPass() {
-            const pass = document.getElementById('pass').value;
-            if (pass === "021603") {
+            if (document.getElementById('pass').value === "021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 loadAdminThemes();
-            } else {
-                alert("Incorrect password. Access denied.");
-            }
+            } else { alert("Wrong Password"); }
         }
 
         async function loadAdminThemes() {
@@ -58,20 +49,17 @@
             const themes = await res.json();
             const list = document.getElementById('admin-theme-list');
             list.innerHTML = themes.map(t => `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;">
-                    <span><strong>${t.name}</strong> (${t.image})</span>
-                    <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:6px 15px; border-radius:8px; cursor:pointer;">Delete</button>
+                <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+                    <span>${t.name}</span>
+                    <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Delete</button>
                 </div>
             `).join('');
         }
 
         async function deleteTheme(id) {
-            if (confirm("Delete this theme from the database? (Note: The image file remains on GitHub)")) {
-                const res = await fetch('/api/delete', {
-                    method: 'POST',
-                    body: JSON.stringify({ id })
-                });
-                if (res.ok) loadAdminThemes();
+            if (confirm("Delete this theme?")) {
+                await fetch('/api/delete', { method: 'POST', body: JSON.stringify({ id }) });
+                loadAdminThemes();
             }
         }
 
@@ -89,11 +77,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(themeData)
             });
-            if (res.ok) {
-                document.getElementById('status').innerText = "Theme saved successfully!";
-                e.target.reset();
-                loadAdminThemes();
-            }
+            if (res.ok) { e.target.reset(); loadAdminThemes(); }
         };
     </script>
 </body>
