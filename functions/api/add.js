@@ -1,8 +1,8 @@
 export async function onRequestPost(context) {
   const { env, request } = context;
-  const { name, description, image, link, try_link } = await request.json();
-
   try {
+    const { name, description, image, link, try_link } = await request.json();
+    // This requires the "DB" binding in your Settings
     await env.DB.prepare(
       "INSERT INTO themes (name, description, image, link, try_link) VALUES (?, ?, ?, ?, ?)"
     ).bind(name, description, image, link, try_link).run();
