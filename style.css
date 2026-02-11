@@ -55,3 +55,27 @@ body {
 .phone-number, .email { color: var(--accent); font-size: 1.1rem; text-decoration: none; font-weight: 600; }
 
 footer { text-align: center; font-size: 0.8rem; color: var(--dark); opacity: 0.6; margin: 40px 0; }
+
+.btn-small {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    transition: 0.3s;
+}
+
+.btn-small.primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-small:hover {
+    transform: translateY(-2px);
+    opacity: 0.8;
+}
+
