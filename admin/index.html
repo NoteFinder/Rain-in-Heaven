@@ -14,17 +14,21 @@
     </div>
 
     <div id="admin-panel" style="display: none; width: 100%; max-width: 700px;" class="about-card">
-        <h2 style="color: var(--primary);">Add New Theme</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
+            <h2 style="color: var(--primary); margin: 0;">Admin Dashboard</h2>
+            <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px; font-size: 0.9rem;">
+                ← Return to Site
+            </a>
+        </div>
+
+        <h3 style="color: var(--primary);">Add New Theme</h3>
         <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px;">
             <input type="text" id="name" placeholder="Theme Name" required>
-            <input type="text" id="desc" placeholder="Short Description" required>
-            
+            <input type="text" id="desc" placeholder="Description" required>
             <label style="text-align:left; color:var(--primary); font-weight:bold;">Upload Image File:</label>
             <input type="file" id="imageFile" accept="image/*" required>
-            
             <input type="text" id="tryLink" placeholder="Samsung Trial Link (Try)" required>
             <input type="text" id="buyLink" placeholder="Samsung Store Link (Buy)" required>
-            
             <button type="submit" class="tab-btn active">Upload & Save Theme</button>
         </form>
         <p id="status" style="margin-top:15px; font-weight:bold;"></p>
@@ -46,9 +50,8 @@
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const status = document.getElementById('status');
-            status.innerText = "Step 1: Uploading image to R2...";
+            status.innerText = "Step 1: Uploading to R2...";
 
-            // 1. Upload to R2
             const fileInput = document.getElementById('imageFile');
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
@@ -56,8 +59,7 @@
             const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
             const { path } = await uploadRes.json();
 
-            // 2. Save to D1
-            status.innerText = "Step 2: Saving links to Database...";
+            status.innerText = "Step 2: Saving to Database...";
             const themeData = {
                 name: document.getElementById('name').value,
                 description: document.getElementById('desc').value,
@@ -73,7 +75,7 @@
             });
 
             if (dbRes.ok) {
-                status.innerText = "Success! Theme is live.";
+                status.innerText = "Success! Theme added.";
                 e.target.reset();
                 loadAdminThemes();
             }
