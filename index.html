@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <section class="hero">
-        <img src="img/logo.png" alt="Rain In Heaven Logo" class="hero-logo">
+        <img src="img/logo.png" alt="Logo" class="hero-logo">
         <h2>THEMES BY RAIN IN HEAVEN</h2>
     </section>
 
@@ -23,45 +22,14 @@
     <main class="container">
         <div id="themes" class="tab-content active">
             <div id="themes-gallery" class="gallery">
-                <p style="text-align: center; color: var(--primary); grid-column: span 3;">Loading beautiful themes...</p>
+                <p style="text-align: center; color: var(--primary); grid-column: span 3;">Loading themes...</p>
             </div>
         </div>
-
-        <div id="home" class="tab-content">
-            <div class="about-card">
-                <h2 style="color:var(--primary); font-weight:300; margin-bottom:25px; font-size: 2rem;">Our Heart & Story</h2>
-                <p style="font-size:1.1rem; line-height:2; color:var(--dark); font-style:italic; max-width:750px; margin:0 auto;">
-                    "Rain in Heaven Themes was born to honor the memory of my beloved son, 
-                    <span style="display:block; margin-top:15px; color:var(--primary); font-weight:700; font-style:normal; font-size:1.5rem;">Rain Justin</span>
-                    Every creation is a reflection of the eternal love and light he brought into our lives."
-                </p>
-
-                <div class="social-links">
-                    <span class="reach-us-text">Reach us:</span>
-                    <a href="https://apps.samsung.com/theme/SellerProductList.as?id=000000059112" target="_blank">
-                        <img src="img/samsung_logo.png" alt="Samsung Store" class="social-icon">
-                    </a>
-                    <a href="https://www.facebook.com/dcbraininheaven" target="_blank">
-                        <img src="img/facebook_logo.png" alt="Facebook" class="social-icon">
-                    </a>
-                </div>
-
-                <div class="contact-area">
-                    <small style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.8rem; color: var(--primary); font-weight: 700;">Samsung Developer</small>
-                    <span class="maker-name">Greta Rose Q. Sebua</span>
-                    <div class="contact-links">
-                        <a href="mailto:gsebua@gmail.com" class="email">gsebua@gmail.com</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>&copy; 2026 Rain In Heaven Creations</footer>
+        </main>
 
     <script>
-        // Your specific Public Development URL from image_a72799.png
-        const R2_URL = "https://pub-5d196666af8d4435aaeeb0d14c8977a8.r2.dev/"; 
+        // Use your local GitHub folder path
+        const IMG_PATH = "img/themes/"; 
 
         async function loadThemes() {
             try {
@@ -76,7 +44,7 @@
 
                 gallery.innerHTML = themes.map(theme => `
                     <div class="card">
-                        <div class="card-img" style="background-image: url('${R2_URL}${theme.image}')"></div>
+                        <div class="card-img" style="background-image: url('${IMG_PATH}${theme.image}')"></div>
                         <div class="card-body">
                             <h3>${theme.name}</h3>
                             <p>${theme.description}</p>
@@ -87,9 +55,7 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) {
-                console.error("Failed to load themes:", err);
-            }
+            } catch (err) { console.error("Error loading themes:", err); }
         }
 
         function switchTab(event, tabId) {
@@ -98,9 +64,7 @@
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
-
         loadThemes();
     </script>
 </body>
 </html>
-
