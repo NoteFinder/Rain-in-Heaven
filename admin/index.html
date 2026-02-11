@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rain In Heaven | Admin</title>
     <link rel="stylesheet" href="../style.css">
 </head>
@@ -16,24 +15,23 @@
 
     <div id="admin-panel" style="display: none; width: 100%; max-width: 700px;" class="about-card">
         <h2 style="color: var(--primary);">Add New Theme</h2>
-        <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px;">
-            <input type="text" id="name" placeholder="Theme Name (e.g., Pajama Party)" required>
-            <input type="text" id="desc" placeholder="Description (e.g., Cozy and dreamy...)" required>
-            <input type="text" id="imgUrl" placeholder="Image Path (e.g., img/pajama.jpg)" required>
-            <input type="text" id="storeLink" placeholder="Samsung Store Link" required>
-            <button type="submit" class="tab-btn active">Add Theme</button>
+        <form id="themeForm" style="display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" id="name" placeholder="Theme Name" required>
+            <input type="text" id="desc" placeholder="Short Description" required>
+            
+            <label style="text-align:left; color:var(--primary); font-weight:bold;">Upload Image File:</label>
+            <input type="file" id="imageFile" accept="image/*" required>
+            
+            <input type="text" id="tryLink" placeholder="Samsung Trial Link (Try)" required>
+            <input type="text" id="buyLink" placeholder="Samsung Store Link (Buy)" required>
+            
+            <button type="submit" class="tab-btn active">Upload & Save Theme</button>
         </form>
-        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 30px 0;">
-        <h3 style="margin-top:30px; color:var(--primary);">Existing Themes</h3>
-        <div id="admin-theme-list" style="text-align: left;">Loading themes...</div>
-        <p id="status" style="font-weight: bold; margin-bottom: 20px;"></p>
+        <p id="status" style="margin-top:15px; font-weight:bold;"></p>
 
-        <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 30px 0;">
-
-        <h2 style="color: var(--primary);">Existing Themes</h2>
-        <div id="admin-theme-list" style="text-align: left;">
-            <p>Loading themes...</p>
-        </div>
+        <hr style="border:0; border-top:1px solid var(--card-border); margin:30px 0;">
+        <h3 style="color:var(--primary);">Existing Themes</h3>
+        <div id="admin-theme-list">Loading...</div>
     </div>
 
     <script>
@@ -45,73 +43,59 @@
             } else { alert("Wrong Password"); }
         }
 
-        async function loadAdminThemes() {
-            try {
-                const res = await fetch('/api/themes');
-                const themes = await res.json();
-                const list = document.getElementById('admin-theme-list');
-                
-                if (themes.length === 0) {
-                    list.innerHTML = "<p>No themes found in database.</p>";
-                    return;
-                }
-
-                list.innerHTML = themes.map(t => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:15px; border-bottom:1px solid var(--card-border); background:#fff; border-radius:10px; margin-bottom:10px;">
-                        <div>
-                            <strong style="color:var(--primary);">${t.name}</strong><br>
-                            <small style="color:var(--light);">${t.image}</small>
-                        </div>
-                        <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; border-radius:20px; cursor:pointer; padding:8px 15px; font-weight:bold;">Delete</button>
-                    </div>
-                `).join('');
-            } catch (err) { console.error("Load error:", err); }
-        }
-
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const status = document.getElementById('status');
-            status.innerText = "Processing...";
+            status.innerText = "Step 1: Uploading image to R2...";
 
-            const data = {
+            // 1. Upload to R2
+            const fileInput = document.getElementById('imageFile');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            const uploadRes = await fetch('/api/upload', { method: 'POST', body: formData });
+            const { path } = await uploadRes.json();
+
+            // 2. Save to D1
+            status.innerText = "Step 2: Saving links to Database...";
+            const themeData = {
                 name: document.getElementById('name').value,
                 description: document.getElementById('desc').value,
-                image: document.getElementById('imgUrl').value,
-                link: document.getElementById('storeLink').value
+                image: path,
+                try_link: document.getElementById('tryLink').value,
+                link: document.getElementById('buyLink').value
             };
 
-            const res = await fetch('/api/add', {
+            const dbRes = await fetch('/api/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(themeData)
             });
 
-            if (res.ok) {
-                status.style.color = "green";
-                status.innerText = "Success! Theme added.";
+            if (dbRes.ok) {
+                status.innerText = "Success! Theme is live.";
                 e.target.reset();
                 loadAdminThemes();
-            } else { 
-                status.style.color = "red";
-                status.innerText = "Error: Ensure DB Binding is set."; 
             }
         };
 
-        async function deleteTheme(id) {
-            if (!confirm("Are you sure you want to delete this theme?")) return;
-            
-            const res = await fetch('/api/delete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id })
-            });
+        async function loadAdminThemes() {
+            const res = await fetch('/api/themes');
+            const themes = await res.json();
+            document.getElementById('admin-theme-list').innerHTML = themes.map(t => `
+                <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
+                    <span>${t.name}</span>
+                    <button onclick="deleteTheme(${t.id})" style="background:red; color:white; border:none; padding:5px; cursor:pointer;">Delete</button>
+                </div>
+            `).join('');
+        }
 
-            if (res.ok) {
+        async function deleteTheme(id) {
+            if (confirm("Delete this theme?")) {
+                await fetch('/api/delete', { method: 'POST', body: JSON.stringify({ id }) });
                 loadAdminThemes();
-            } else { alert("Error deleting theme."); }
+            }
         }
     </script>
 </body>
 </html>
-
-
