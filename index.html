@@ -15,7 +15,7 @@
     <div class="nav-wrapper">
         <nav class="tabs">
             <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
-            <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
+            <button class="tab-btn" onclick="switchTab(event, 'about-section')">About</button>
         </nav>
     </div>
 
@@ -25,11 +25,18 @@
                 <p style="text-align: center; color: var(--primary); grid-column: span 3;">Loading themes...</p>
             </div>
         </div>
-        </main>
+
+        <div id="about-section" class="tab-content">
+            <div class="about-card">
+                <h2 style="color: var(--primary); margin-bottom: 20px;">About the Creator</h2>
+                <p>Welcome to Designed Creations! I am Greta Rose, a digital artist specializing in aesthetic and functional themes for Samsung devices. My goal is to bring a touch of "Heaven" to your everyday digital experience.</p>
+                <p style="margin-top: 15px;">Every theme is crafted with care, ensuring high-quality icons, wallpapers, and interface designs that reflect your unique style.</p>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // Based on your GitHub screenshot, images are in 'img/'
-        const IMG_PATH = "img/"; 
+        const IMG_PATH = "img/"; // Pulls from your GitHub img folder
 
         async function loadThemes() {
             try {
@@ -38,7 +45,7 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">No themes found. Upload them in Admin!</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">No themes live yet. Visit Admin to add some!</p>';
                     return;
                 }
 
@@ -55,7 +62,7 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { console.error("Error loading gallery:", err); }
+            } catch (err) { console.error("Error:", err); }
         }
 
         function switchTab(event, tabId) {
@@ -64,6 +71,7 @@
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
+
         loadThemes();
     </script>
 </body>
