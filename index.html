@@ -15,7 +15,7 @@
     <div class="nav-wrapper">
         <nav class="tabs">
             <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
-            <button class="tab-btn" onclick="switchTab(event, 'about-section')">About</button>
+            <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
         </nav>
     </div>
 
@@ -26,17 +26,26 @@
             </div>
         </div>
 
-        <div id="about-section" class="tab-content">
+        <div id="home" class="tab-content">
             <div class="about-card">
-                <h2 style="color: var(--primary); margin-bottom: 20px;">About the Creator</h2>
-                <p>Welcome to Designed Creations! I am Greta Rose, a digital artist specializing in aesthetic and functional themes for Samsung devices. My goal is to bring a touch of "Heaven" to your everyday digital experience.</p>
-                <p style="margin-top: 15px;">Every theme is crafted with care, ensuring high-quality icons, wallpapers, and interface designs that reflect your unique style.</p>
+                <h2 style="color: var(--primary); margin-bottom: 20px;">Designed Creations by Rain In Heaven</h2>
+                <p>Designed Creations by Rain In Heaven is more than just a brand—it is a labor of love and a tribute to a very special inspiration.</p>
+                
+                <p style="margin-top: 15px; font-weight: bold; font-style: italic; color: var(--primary);">
+                    Dedicated to my son, Rain Justin.
+                </p>
+
+                <p style="margin-top: 15px;">
+                    Every design, color palette, and icon is crafted with the same care and dedication I hold for my son. 
+                    I strive to bring beauty and peace to your digital world, just as Rain has brought light into mine. 
+                    Thank you for supporting this journey.
+                </p>
             </div>
         </div>
     </main>
 
     <script>
-        const IMG_PATH = "img/"; // Pulls from your GitHub img folder
+        const IMG_PATH = "img/"; // Using local GitHub folder
 
         async function loadThemes() {
             try {
@@ -45,7 +54,7 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">No themes live yet. Visit Admin to add some!</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; text-align: center;">Coming soon...</p>';
                     return;
                 }
 
@@ -62,9 +71,10 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { console.error("Error:", err); }
+            } catch (err) { console.error("Error loading themes:", err); }
         }
 
+        // Tab Switching Logic
         function switchTab(event, tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
