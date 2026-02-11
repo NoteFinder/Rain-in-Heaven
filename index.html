@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
 
     <section class="hero">
         <img src="img/logo.png" alt="Rain In Heaven Logo" class="hero-logo">
+        <h2>Themes by Rain in Heaven</h2>
     </section>
 
     <div class="nav-wrapper">
@@ -63,6 +64,9 @@
     <footer>&copy; 2026 Rain In Heaven Creations</footer>
 
     <script>
+        // REPLACE THIS URL WITH YOUR R2 PUBLIC URL FROM SETTINGS
+        const R2_PUBLIC_URL = "https://pub-5d196666af8d4435aaeeb0d14c8977a8.r2.dev"; 
+
         async function loadThemes() {
             try {
                 const response = await fetch('/api/themes');
@@ -70,13 +74,13 @@
                 const gallery = document.getElementById('themes-gallery');
                 
                 if (themes.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: span 3;">More beauty coming soon...</p>';
+                    gallery.innerHTML = '<p style="grid-column: span 3; color: var(--primary);">More beauty coming soon...</p>';
                     return;
                 }
 
                 gallery.innerHTML = themes.map(theme => `
                     <div class="card">
-                        <div class="card-img" style="background-image: url('https://pub-your-id.r2.dev/${theme.image}')"></div>
+                        <div class="card-img" style="background-image: url('${R2_PUBLIC_URL}${theme.image}')"></div>
                         <div class="card-body">
                             <h3>${theme.name}</h3>
                             <p>${theme.description}</p>
@@ -104,6 +108,3 @@
     </script>
 </body>
 </html>
-
-
-
