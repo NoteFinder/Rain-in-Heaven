@@ -104,18 +104,19 @@
                     return;
                 }
 
-                gallery.innerHTML = themes.map(t => `
-                    <div class="card">
-                        <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
-                        <div class="card-body">
-                            <h3>${t.name}</h3>
-                            <div class="card-actions">
-                                <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
-                                <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
-                            </div>
+        gallery.innerHTML = paginatedThemes.map(t => `
+                <div class="card">
+                    <div class="card-img" style="background-image: url('img/${t.image}')"></div>
+                    <div class="card-body">
+                        <h3 style="color: var(--primary); font-family: var(--font-heading);">${t.name}</h3>
+                        <p style="font-size: 0.8rem; margin-bottom: 15px;">${t.description}</p>
+                        <div style="display: flex; gap: 10px;">
+                            <a href="${t.try_link}" class="btn-small">Trial</a>
+                            <a href="${t.link}" class="btn-small primary">Buy</a>
                         </div>
                     </div>
-                `).join('');
+                </div>
+            `).join('');
             } catch (err) { 
                 console.error(err);
                 gallery.innerHTML = '<p>Error loading themes. Please try again later.</p>';
@@ -163,3 +164,4 @@
     </script>
 </body>
 </html>
+
