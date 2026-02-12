@@ -1,10 +1,10 @@
-/* Import elegant Google Fonts */
+/* Import consistent fonts */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Dancing+Script:wght@700&display=swap');
 
 :root {
     --primary: #f8a5c2; 
     --accent: #ffb6c1; 
-    --dark: #5d5d5d;
+    --dark: #333333; /* For the black font color */
     --light: #a0a0a0;
     --bg: #fff0f5; 
     --card-bg: #fff9fb;
@@ -35,56 +35,50 @@ body {
 /* NAVIGATION TABS */
 .nav-wrapper { max-width: 500px; margin: -35px auto 40px; position: relative; z-index: 100; }
 .tabs { background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.tab-btn { border: none; background: none; padding: 12px 25px; font-weight: 700; color: var(--primary); cursor: pointer; border-radius: 40px; font-family: var(--font-body); transition: 0.3s; }
+.tab-btn { border: none; background: none; padding: 12px 25px; font-weight: 700; color: var(--primary); cursor: pointer; border-radius: 40px; transition: 0.3s; font-family: var(--font-body); }
 .tab-btn.active { background: var(--primary); color: white; }
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
 
-/* GALLERY & CARDS */
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, 230px); gap: 35px; justify-content: center; }
-.card { 
-    background: var(--card-bg); border-radius: 25px; overflow: hidden; text-decoration: none; color: inherit; 
-    transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column;
-}
-.card:hover { transform: translateY(-10px); border-color: var(--primary); }
-.card-img { width: 100%; aspect-ratio: 9 / 16; background-size: cover; background-position: center; }
-.card-body { padding: 20px; text-align: center; border-top: 5px solid var(--primary); flex-grow: 1; }
-.card-body h3 { font-family: var(--font-heading); margin: 0 0 8px; color: var(--primary); font-size: 1.2rem; }
-
-/* BUTTONS */
-.btn-small { flex: 1; padding: 10px; border-radius: 20px; text-align: center; text-decoration: none; font-size: 0.8rem; font-weight: bold; border: 2px solid var(--primary); color: var(--primary); transition: 0.3s; }
-.btn-small.primary { background: var(--primary); color: white; }
-.btn-small:hover { transform: translateY(-2px); opacity: 0.8; }
-
-/* ABOUT SECTION & DEDICATION (CONSISTENT HEADINGS) */
-.about-card { background: var(--card-bg); padding: 40px; border-radius: 30px; border: 2px solid var(--card-border); text-align: center; max-width: 800px; margin: 0 auto; }
-
-/* Force all headings in about/subscribe to match font and color */
-.about-card h2, .about-card h3, .subscribe-section h2 {
-    font-family: var(--font-heading);
-    color: var(--primary);
-    margin: 15px 0;
+/* UNIFORM HEADERS (About, Rain Justin, Designer, Subscribe) */
+.about-card h2, 
+.about-card h3, 
+.subscribe-section h2 {
+    font-family: var(--font-heading) !important;
+    font-size: 2.2rem !important; /* Uniform size */
+    color: var(--primary) !important; /* Pink color */
+    margin: 20px 0;
     font-weight: 700;
+    text-transform: none;
 }
 
-/* Maintain specific script font for the main title only */
-.heart-story-title { 
-    font-family: var(--font-script) !important; 
-    font-size: 3rem; 
-    margin: 0; 
+/* SPECIAL STYLE FOR YOUR NAME */
+.maker-name {
+    font-family: var(--font-body) !important;
+    font-size: 1.4rem !important; /* Smaller size */
+    color: #000000 !important; /* Black font color */
+    font-weight: 700;
+    margin: 5px 0 15px 0 !important;
+    text-transform: none !important;
 }
 
-.social-links { display: flex; justify-content: center; align-items: center; gap: 25px; margin: 30px 0; flex-wrap: wrap; }
-.social-icon { width: 55px; height: auto; transition: 0.3s ease; }
+/* ABOUT CARD & CONTENT */
+.about-card { background: var(--card-bg); padding: 50px 30px; border-radius: 35px; border: 2px solid var(--card-border); text-align: center; max-width: 800px; margin: 0 auto; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
+
+.social-links { display: flex; justify-content: center; align-items: center; gap: 25px; margin: 30px 0; }
+.social-icon { width: 55px; height: 55px; transition: 0.3s ease; }
 .social-icon:hover { transform: scale(1.1); }
 
 /* SUBSCRIBE FORM */
-.subscribe-section { background-color: var(--card-bg); padding: 40px 20px; border: 1px solid var(--card-border); border-radius: 25px; margin: 40px auto; text-align: left; max-width: 700px; }
-.subscribe-section h2 { text-align: center; font-size: 2.2rem; margin-bottom: 10px; }
-.sub-input { width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 8px; box-sizing: border-box; font-family: var(--font-body); background: white; margin-bottom: 15px; }
-.btn-subscribe { background: var(--dark); color: white; padding: 15px 40px; border: none; border-radius: 30px; font-weight: bold; cursor: pointer; display: block; margin: 20px auto 0; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+.subscribe-section { background-color: white; padding: 40px; border: 1px solid var(--card-border); border-radius: 25px; margin-top: 50px; text-align: left; }
+.sub-input { font-family: var(--font-body); width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; margin-bottom: 15px; background: var(--card-bg); box-sizing: border-box; }
+.btn-subscribe { font-family: var(--font-body); font-weight: 700; background: var(--dark); color: white; border: none; padding: 15px 40px; border-radius: 30px; cursor: pointer; text-transform: uppercase; display: block; margin: 20px auto 0; transition: 0.3s; }
 .btn-subscribe:hover { background: var(--primary); }
 
-footer { text-align: center; font-size: 0.8rem; color: var(--dark); opacity: 0.6; margin: 40px 0; }
+/* GALLERY */
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, 230px); gap: 35px; justify-content: center; }
+.card { background: var(--card-bg); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column; }
+.card-img { width: 100%; aspect-ratio: 9 / 16; background-size: cover; background-position: center; }
+.card-body h3 { font-size: 1.2rem !important; margin: 10px 0 !important; }
