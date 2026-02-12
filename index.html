@@ -19,9 +19,12 @@
         </nav>
     </div>
 
-        <div class="container">
-            <div id="theme-gallery" class="gallery">
+    <main class="container">
+            <section id="themes" class="tab-content active">
+                <div id="themes-gallery" class="gallery">
+                    <p class="status-msg">Loading themes...</p>
                 </div>
+            </section>
         
             <div class="pagination-controls">
                 <button id="prevPage" class="btn-small" onclick="changePage(-1)">Previous</button>
@@ -95,7 +98,7 @@
             select.appendChild(opt);
         });
 
-        // Load Gallery
+        // Load 
         async function loadThemes() {
             const gallery = document.getElementById('themes-gallery');
             try {
@@ -171,6 +174,7 @@
     </script>
 </body>
 </html>
+
 
 
 
