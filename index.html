@@ -104,18 +104,21 @@
                     return;
                 }
 
-                gallery.innerHTML = themes.map(t => `
-                    <div class="card">
-                        <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
-                        <div class="card-body">
-                            <h3>${t.name}</h3>
-                            <div class="card-actions">
-                                <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
-                                <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
-                            </div>
+            // Locate this section in your main index file's <script> tag
+            gallery.innerHTML = themes.map(t => `
+                <div class="card">
+                    <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
+                    <div class="card-body">
+                        <h3>${t.name}</h3>
+                        <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">${t.description}</p>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: auto;">
+                            <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
+                            <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
                         </div>
                     </div>
-                `).join('');
+                </div>
+            `).join('');
             } catch (err) { 
                 console.error(err);
                 gallery.innerHTML = '<p>Error loading themes. Please try again later.</p>';
@@ -163,3 +166,4 @@
     </script>
 </body>
 </html>
+
