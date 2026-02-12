@@ -5,8 +5,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Designed Creations by Rain In Heaven</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Essential Pagination & Grid Styles */
+        .gallery { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 30px; 
+            justify-content: center; 
+            min-height: 400px;
+        }
+
+        /* Responsive: Stack on mobile */
+        @media (max-width: 900px) {
+            .gallery { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .gallery { grid-template-columns: 1fr; }
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 50px;
+        }
+
+        .page-btn {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .page-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .page-btn:disabled {
+            border-color: var(--card-border);
+            color: var(--light);
+            cursor: not-allowed;
+        }
+
+        .theme-desc {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 10px 0 20px;
+            line-height: 1.5;
+            min-height: 2.5em; /* Keeps card heights consistent */
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+        }
+
+        .btn-small {
+            flex: 1;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-align: center;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            transition: 0.3s;
+        }
+
+        .btn-small.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-small:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
+
     <section class="hero">
         <img src="img/logo.png" alt="Logo" class="hero-logo">
         <h2>THEMES BY RAIN IN HEAVEN</h2>
@@ -24,6 +110,8 @@
             <div id="themes-gallery" class="gallery">
                 <p style="text-align: center; grid-column: span 3;">Loading themes...</p>
             </div>
+            
+            <div id="pagination-controls" class="pagination"></div>
         </div>
 
         <div id="home" class="tab-content">
@@ -32,15 +120,19 @@
                 <p style="font-style: italic;">"Rain in Heaven Themes was born to honor the memory of my beloved son,"</p>
                 <h3>Rain Justin</h3>
                 <p style="font-style: italic;">"Every creation is a reflection of the eternal love and light he brought into our lives."</p>
+
                 <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
+
                 <h2>Galaxy Theme Store Designer</h2>
                 <h3 class="maker-name">Greta Rose Q. Sebua</h3>
                 <p><strong>0916 239 2794 | gsebua@gmail.com</strong></p>
+
                 <div class="social-links">
-                    <a href="#" target="_blank"><img src="img/samsung_logo.png" class="social-icon" alt="Samsung"></a>
-                    <a href="#" target="_blank"><img src="img/facebook_logo.png" class="social-icon" alt="Facebook"></a>
-                    <a href="#" target="_blank"><img src="img/youtube_logo.png" class="social-icon" alt="YouTube"></a>
+                    <a href="#"><img src="img/samsung_logo.png" class="social-icon" alt="Samsung"></a>
+                    <a href="#"><img src="img/facebook_logo.png" class="social-icon" alt="Facebook"></a>
+                    <a href="#"><img src="img/youtube_logo.png" class="social-icon" alt="YouTube"></a>
                 </div>
+
                 <div class="subscribe-section">
                     <h2>Subscribe</h2>
                     <p style="text-align: center; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px;">WEEKLY NEWSLETTER UPDATES</p>
@@ -60,7 +152,79 @@
 
     <script>
         const IMG_PATH = "img/";
+        const THEMES_PER_PAGE = 3;
+        let allThemes = [];
+        let currentPage = 1;
 
+        // Load Gallery and Setup Pagination
+        async function loadThemes() {
+            try {
+                const res = await fetch('/api/themes');
+                allThemes = await res.json();
+                renderGallery();
+            } catch (err) { 
+                console.error(err);
+                document.getElementById('themes-gallery').innerHTML = "<p>Error loading themes.</p>";
+            }
+        }
+
+        function renderGallery() {
+            const gallery = document.getElementById('themes-gallery');
+            const pagination = document.getElementById('pagination-controls');
+            
+            // Calculate indices
+            const startIndex = (currentPage - 1) * THEMES_PER_PAGE;
+            const endIndex = startIndex + THEMES_PER_PAGE;
+            const displayedThemes = allThemes.slice(startIndex, endIndex);
+
+            // 1. Generate Cards
+            if (displayedThemes.length === 0) {
+                gallery.innerHTML = "<p>No themes found.</p>";
+                return;
+            }
+
+            gallery.innerHTML = displayedThemes.map(t => `
+                <div class="card">
+                    <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
+                    <div class="card-body">
+                        <h3>${t.name}</h3>
+                        <p class="theme-desc">${t.description || 'No description available.'}</p>
+                        <div class="btn-group">
+                            <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
+                            <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 2. Generate Pagination Buttons
+            const totalPages = Math.ceil(allThemes.length / THEMES_PER_PAGE);
+            pagination.innerHTML = "";
+
+            if (totalPages > 1) {
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement('button');
+                    btn.innerText = i;
+                    btn.className = (i === currentPage) ? 'page-btn active' : 'page-btn';
+                    btn.onclick = () => {
+                        currentPage = i;
+                        renderGallery();
+                        window.scrollTo({ top: 400, behavior: 'smooth' });
+                    };
+                    pagination.appendChild(btn);
+                }
+            }
+        }
+
+        // Tab Switching Logic
+        function switchTab(event, tabId) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Initialize Countries
         const countries = ["Philippines", "United States", "South Korea", "Japan", "United Kingdom", "Canada", "Australia", "Other"];
         const select = document.getElementById('subCountry');
         countries.forEach(c => {
@@ -69,33 +233,7 @@
             select.appendChild(opt);
         });
 
-        async function loadThemes() {
-            try {
-                const res = await fetch('/api/themes');
-                const themes = await res.json();
-                const gallery = document.getElementById('themes-gallery');
-                gallery.innerHTML = themes.map(t => `
-                    <div class="card">
-                        <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
-                        <div class="card-body">
-                            <h3>${t.name}</h3>
-                            <p class="theme-desc">${t.description || ''}</p>
-                            <div class="btn-group">
-                                <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
-                                <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            } catch (err) { console.error(err); }
-        }
-
-        function switchTab(event, tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+        // Load on start
         loadThemes();
     </script>
 </body>
