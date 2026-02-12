@@ -5,119 +5,103 @@
     --primary: #f8a5c2; 
     --accent: #ffb6c1; 
     --dark: #333333;
-    --light: #a0a0a0;
     --bg: #fff0f5; 
     --card-bg: #fff9fb;
     --card-border: #fce4ec;
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Montserrat', sans-serif;
-    --font-script: 'Dancing Script', cursive;
 }
 
-body {
-    font-family: var(--font-body);
-    margin: 0; padding: 0;
-    background-color: var(--bg);
-    color: var(--dark);
-    line-height: 1.6;
+/* GALLERY GRID: Set to exactly 3 columns */
+.gallery { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 30px; 
+    justify-content: center; 
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-/* HERO SECTION */
-.hero {
-    height: 65vh; min-height: 500px;
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('img/background.jpg') center/cover fixed;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    color: white; text-align: center;
-}
-.hero-logo { width: 260px; height: auto; margin-bottom: 10px; }
-.hero h2 { font-size: 1.4rem; letter-spacing: 5px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-/* NAVIGATION TABS */
-.nav-wrapper { max-width: 500px; margin: -35px auto 40px; position: relative; z-index: 100; }
-.tabs { background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.tab-btn { border: none; background: none; padding: 12px 25px; font-weight: 700; color: var(--primary); cursor: pointer; border-radius: 40px; transition: 0.3s; font-family: var(--font-body); }
-.tab-btn.active { background: var(--primary); color: white; }
-
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-
-/* UNIFORM HEADERS (About, Rain Justin, Designer, Subscribe) */
-.about-card h2, 
-.about-card h3:not(.maker-name), 
-.subscribe-section h2 {
-    font-family: var(--font-heading) !important;
-    font-size: 2.2rem !important;
-    color: var(--primary) !important;
-    margin: 20px 0;
-    font-weight: 700;
+/* Responsive: 1 column on mobile */
+@media (max-width: 768px) {
+    .gallery { grid-template-columns: 1fr; }
 }
 
-/* SPECIAL STYLE FOR YOUR NAME */
-.maker-name {
-    font-family: var(--font-body) !important;
-    font-size: 1.4rem !important; /* Smaller size */
-    color: #000000 !important; /* Black color */
-    font-weight: 700;
-    margin: 5px 0 15px 0 !important;
-    text-transform: none !important;
+.card { 
+    background: var(--card-bg); 
+    border-radius: 25px; 
+    overflow: hidden; 
+    border: 2px solid var(--card-border); 
+    display: flex; 
+    flex-direction: column; 
+    height: 100%;
 }
 
-/* ABOUT CARD & CONTENT */
-.about-card { background: var(--card-bg); padding: 50px 30px; border-radius: 35px; border: 2px solid var(--card-border); text-align: center; max-width: 800px; margin: 0 auto; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-
-.social-links { display: flex; justify-content: center; align-items: center; gap: 25px; margin: 30px 0; }
-.social-icon { width: 55px; height: 55px; transition: 0.3s ease; }
-.social-icon:hover { transform: scale(1.1); }
-
-/* SUBSCRIBE FORM */
-.subscribe-section { background-color: white; padding: 40px; border: 1px solid var(--card-border); border-radius: 25px; margin-top: 50px; text-align: left; }
-.sub-input { font-family: var(--font-body); width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; margin-bottom: 15px; background: var(--card-bg); box-sizing: border-box; }
-.btn-subscribe { font-family: var(--font-body); font-weight: 700; background: var(--dark); color: white; border: none; padding: 15px 40px; border-radius: 30px; cursor: pointer; text-transform: uppercase; display: block; margin: 20px auto 0; transition: 0.3s; }
-.btn-subscribe:hover { background: var(--primary); }
-
-/* GALLERY */
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, 230px); gap: 35px; justify-content: center; }
-.card { background: var(--card-bg); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column; }
-.card-img { width: 100%; aspect-ratio: 9 / 16; background-size: cover; background-position: center; }
-.card-body h3 { font-size: 1.2rem !important; margin: 10px 0 !important; }
-
-
-/* BUTTON STYLES FOR THEMES */
-.card-body {
-    padding: 15px;
-    text-align: center;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.card-img { 
+    width: 100%; 
+    aspect-ratio: 9 / 16; 
+    background-size: cover; 
+    background-position: center; 
 }
 
-.btn-small {
+.card-body { 
+    padding: 20px; 
+    text-align: center; 
+    display: flex; 
+    flex-direction: column; 
+    flex-grow: 1; 
+}
+
+.theme-desc { 
+    font-size: 0.85rem; 
+    color: #777; 
+    margin-bottom: 15px;
+}
+
+/* BUTTONS */
+.btn-group { 
+    display: flex; 
+    gap: 10px; 
+    margin-top: auto; 
+}
+
+.btn-small { 
     flex: 1;
     text-decoration: none;
     font-family: var(--font-body);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    padding: 10px 0;
-    border-radius: 20px;
-    text-align: center;
-    transition: 0.3s;
-    border: 1px solid var(--primary);
+    padding: 12px 0;
+    border-radius: 25px;
+    border: 1.5px solid var(--primary);
     color: var(--primary);
-    background: transparent;
+    display: inline-block;
+    text-align: center;
 }
 
-.btn-small:hover {
-    background: var(--card-border);
+.btn-small.primary { 
+    background: var(--primary); 
+    color: white; 
 }
 
-.btn-small.primary {
+/* PAGINATION STYLING */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.page-btn {
+    padding: 10px 15px;
+    border: 1px solid var(--primary);
+    background: white;
+    color: var(--primary);
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.page-btn.active {
     background: var(--primary);
     color: white;
-}
-
-.btn-small.primary:hover {
-    background: #f187ab; /* Slightly darker pink for hover */
-    border-color: #f187ab;
 }
