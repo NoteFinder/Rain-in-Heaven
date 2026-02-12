@@ -28,15 +28,15 @@
 
         <div id="home" class="tab-content">
             <div class="about-card">
-                <h2 class="heart-story-title">Our Heart & Story</h2>
-                <p style="font-style: italic; font-size: 1.1rem;">"Rain in Heaven Themes was born to honor the memory of my beloved son,"</p>
+                <h2 class="story-title">Our Heart & Story</h2>
+                <p style="font-style: italic;">"Rain in Heaven Themes was born to honor the memory of my beloved son,"</p>
                 <h3 class="dedication-name">Rain Justin</h3>
-                <p style="font-style: italic; font-size: 1.1rem;">"Every creation is a reflection of the eternal love and light he brought into our lives."</p>
+                <p style="font-style: italic;">"Every creation is a reflection of the eternal love and light he brought into our lives."</p>
 
                 <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
-                <h2 style="font-size: 1.8rem; color: var(--primary);">Galaxy Theme Store Designer</h2>
-                <h3 style="font-size: 1.4rem; margin: 5px 0;">Greta Rose Q. Sebua</h3>
+                <h2 class="section-title">Galaxy Theme Store Designer</h2>
+                <h3 style="font-size: 1.6rem; margin: 10px 0;">Greta Rose Q. Sebua</h3>
                 <p><strong>Phone:</strong> 0916 239 2794</p>
 
                 <div class="social-links">
@@ -45,45 +45,42 @@
                     <a href="#" target="_blank"><img src="img/youtube_logo.png" class="social-icon" alt="YouTube"></a>
                 </div>
 
-                <div class="subscribe-section">
-                    <h2>Subscribe</h2>
-                    <p style="text-align: center; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 30px;">WEEKLY NEWSLETTER UPDATES</p>
-                    <form id="subscribeForm">
-                        <label style="font-weight: bold;">Email Address *</label>
+                <div class="sub-card">
+                    <h2 class="story-title" style="font-size: 2.8rem; text-align: center;">Subscribe</h2>
+                    <p class="section-title" style="font-size: 0.8rem; text-align: center;">Weekly Newsletter Updates</p>
+                    
+                    <form id="subscribeForm" style="margin-top: 30px;">
+                        <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 5px;">Email Address *</label>
                         <input type="email" id="subEmail" class="sub-input" required>
                         
-                        <label style="font-weight: bold;">Country *</label>
+                        <label style="font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 5px;">Country *</label>
                         <select id="subCountry" class="sub-input" required>
                             <option value="">Select your country...</option>
                         </select>
-                        
-                        <label style="font-weight: bold;">Interests *</label>
-                        <div style="margin-top: 10px;">
-                            <label><input type="checkbox" name="interest" value="new-themes"> New Themes</label><br>
-                            <label><input type="checkbox" name="interest" value="sales"> Sales</label>
-                        </div>
-                        
+
                         <button type="submit" class="btn-subscribe">Subscribe Now</button>
                     </form>
                 </div>
+                
+                <p style="color: var(--light); margin-top: 40px;">For inquiries: <br>
+                <a href="mailto:gsebu@gmail.com" style="color: var(--accent); text-decoration: none; font-weight: 700;">gsebu@gmail.com</a></p>
             </div>
         </div>
     </main>
 
     <script>
-        const IMG_PATH = "img/";
+        const IMG_PATH = "img/"; // Pulls from GitHub
 
-        // 1. Populate All Countries
-        const countries = ["Philippines", "United States", "South Korea", "United Kingdom", "Canada", "Australia", "Germany", "France", "Japan", "Brazil", "India", "Singapore", "Malaysia", "Vietnam", "Indonesia", "Thailand", "Other"];
-        const countrySelect = document.getElementById('subCountry');
-        countries.forEach(country => {
-            const opt = document.createElement('option');
-            opt.value = country;
-            opt.innerHTML = country;
-            countrySelect.appendChild(opt);
+        // Populate Country List
+        const countries = ["Philippines", "United States", "South Korea", "Japan", "United Kingdom", "Canada", "Australia", "Germany", "France", "Other"];
+        const select = document.getElementById('subCountry');
+        countries.forEach(c => {
+            let opt = document.createElement('option');
+            opt.value = c; opt.innerHTML = c;
+            select.appendChild(opt);
         });
 
-        // 2. Load Gallery
+        // Load Gallery
         async function loadThemes() {
             try {
                 const res = await fetch('/api/themes');
@@ -104,16 +101,14 @@
             } catch (err) { console.error(err); }
         }
 
-        // 3. Subscription Handler
+        // Subscription Handler
         document.getElementById('subscribeForm').onsubmit = async (e) => {
             e.preventDefault();
-            const interests = Array.from(document.querySelectorAll('input[name="interest"]:checked')).map(el => el.value).join(', ');
             const res = await fetch('/api/subscribe', {
                 method: 'POST',
                 body: JSON.stringify({
                     email: document.getElementById('subEmail').value,
-                    country: document.getElementById('subCountry').value,
-                    interests: interests
+                    country: document.getElementById('subCountry').value
                 })
             });
             if (res.ok) { alert("Successfully Subscribed!"); e.target.reset(); }
