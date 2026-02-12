@@ -162,33 +162,34 @@ body {
 
 .card-body h3 { font-size: 1.2rem !important; margin: 10px 0 !important; }
 
-/* BUTTON STYLES FOR THEMES */
+/* Card Body and Action Container */
 .card-body {
-    padding: 15px;
+    padding: 20px;
     text-align: center;
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.btn-small {
-    flex: 1;
-    text-decoration: none;
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 10px 0;
-    border-radius: 20px;
-    text-align: center;
-    transition: 0.3s;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-    background: transparent;
+.card-actions {
+    display: flex;
+    gap: 10px; /* Space between the two buttons */
+    margin-top: 15px;
+    width: 100%;
 }
 
-.btn-small:hover {
-    background: var(--card-border);
+/* Button Styling */
+.btn-small {
+    flex: 1; /* This makes both buttons take up equal 50/50 width */
+    padding: 12px 0; /* Vertical padding for better height */
+    border-radius: 30px; /* Rounded pill shape from your design */
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-align: center;
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    transition: 0.3s;
 }
 
 .btn-small.primary {
@@ -196,30 +197,5 @@ body {
     color: white;
 }
 
-.btn-small.primary:hover {
-    background: #f187ab; /* Slightly darker pink for hover */
-    border-color: #f187ab;
-}
-
-
-/* Pagination Controls */
-.pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 40px;
-}
-
-.page-indicator {
-    font-weight: bold;
-    color: var(--primary);
-    font-family: var(--font-body);
-}
-
-/* Ensure the gallery doesn't jump around when switching pages */
-.gallery {
-    min-height: 450px; 
-}
 
 
