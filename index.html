@@ -61,6 +61,21 @@
     </main>
 
     <script>
+                // Search Filtering Logic
+                function filterThemes() {
+                    const query = document.getElementById('themeSearch').value.toLowerCase();
+                    const cards = document.querySelectorAll('#themes-gallery .card');
+                    
+                    cards.forEach(card => {
+                        const themeName = card.querySelector('h3').innerText.toLowerCase();
+                        // Hide cards that don't match the search query
+                        if (themeName.includes(query)) {
+                            card.style.display = "block";
+                        } else {
+                            card.style.display = "none";
+                        }
+                    });
+                }
         const IMG_PATH = "img/";
         let currentPage = 1;
         const themesPerPage = 8;
@@ -86,21 +101,6 @@
                         </div>
                     </div>
                 `).join('');
-                // Search Filtering Logic
-                function filterThemes() {
-                    const query = document.getElementById('themeSearch').value.toLowerCase();
-                    const cards = document.querySelectorAll('#themes-gallery .card');
-                    
-                    cards.forEach(card => {
-                        const themeName = card.querySelector('h3').innerText.toLowerCase();
-                        // Hide cards that don't match the search query
-                        if (themeName.includes(query)) {
-                            card.style.display = "block";
-                        } else {
-                            card.style.display = "none";
-                        }
-                    });
-                }
                 const totalPages = Math.ceil(data.total / themesPerPage);
                 let btnHtml = '';
                 for (let i = 1; i <= totalPages; i++) {
@@ -149,6 +149,7 @@
     </script>
 </body>
 </html>
+
 
 
 
