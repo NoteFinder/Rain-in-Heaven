@@ -7,24 +7,23 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header class="hero">
-        <img src="img/logo.png" alt="Rain In Heaven Logo" class="hero-logo">
+        <img src="img/logo.png" alt="Logo" class="hero-logo">
     </header>
 
     <div class="nav-wrapper">
-        <nav class="tabs" role="tablist">
-            <button class="tab-btn active" onclick="switchTab(event, 'themes')" role="tab">Themes</button>
-            <button class="tab-btn" onclick="switchTab(event, 'home')" role="tab">About</button>
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
+            <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
         </nav>
     </div>
 
     <main class="container">
         <section id="themes" class="tab-content active">
             <div id="themes-gallery" class="gallery">
-                <div id="pagination-numbers" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;">
-                <p class="status-msg">Loading themes...</p>
+                <p>Loading themes...</p>
             </div>
+            <div id="pagination-numbers"></div>
         </section>
 
         <section id="home" class="tab-content">
@@ -35,40 +34,14 @@
                     <h3 class="dedication-name">Rain Justin</h3>
                     "Every creation is a reflection of the eternal love and light he brought into our lives."
                 </blockquote>
-
                 <hr class="divider">
-
                 <h2>Galaxy Theme Store Designer</h2>
                 <h3 class="maker-name">Greta Rose Q. Sebua</h3>
-                
-                <p class="contact-info">
-                    <a href="tel:+639162392794">0916 239 2794</a> 
-                    <span class="spacer">|</span> 
-                    <a href="mailto:gsebua@gmail.com">gsebua@gmail.com</a>
-                </p>
-
+                <p class="contact-info">0916 239 2794 | gsebua@gmail.com</p>
                 <div class="social-links">
-                    <a href="https://apps.samsung.com/theme/SellerProductList.as?id=000000059112" target="_blank"><img src="img/samsung_logo.png" class="social-icon" alt="Samsung Store"></a>
-                    <a href="https://facebook.com/dcbraininheaven" target="_blank"><img src="img/facebook_logo.png" class="social-icon" alt="Facebook"></a>
-                    <a href="https://www.youtube.com/c/RainHeaven" target="_blank"><img src="img/youtube_logo.png" class="social-icon" alt="YouTube"></a>
-                </div>
-
-                <div class="subscribe-section">
-                    <h2>Subscribe</h2>
-                    <p class="sub-headline">WEEKLY NEWSLETTER UPDATES</p>
-                    <form id="subscribeForm">
-                        <div class="form-group">
-                            <label for="subEmail">Email Address *</label>
-                            <input type="email" id="subEmail" class="sub-input" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subCountry">Country *</label>
-                            <select id="subCountry" class="sub-input" required>
-                                <option value="">Select your country...</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn-subscribe">Subscribe Now</button>
-                    </form>
+                    <a href="https://apps.samsung.com/theme/SellerProductList.as?id=000000059112" target="_blank"><img src="img/samsung_logo.png" class="social-icon"></a>
+                    <a href="https://facebook.com/dcbraininheaven" target="_blank"><img src="img/facebook_logo.png" class="social-icon"></a>
+                    <a href="https://www.youtube.com/c/RainHeaven" target="_blank"><img src="img/youtube_logo.png" class="social-icon"></a>
                 </div>
             </div>
         </section>
@@ -76,29 +49,20 @@
 
     <script>
         const IMG_PATH = "img/";
-
-        const countries = ["Philippines", "United States", "South Korea", "Japan", "United Kingdom", "Canada", "Australia", "Other"];
-        const select = document.getElementById('subCountry');
-        countries.forEach(country => {
-            const opt = document.createElement('option');
-            opt.value = country;
-            opt.textContent = country;
-            select.appendChild(opt);
-        });
+        let currentPage = 1;
+        const themesPerPage = 8; // 2 rows of 4 on PC
 
         async function loadThemes() {
             const gallery = document.getElementById('themes-gallery');
+            const pagination = document.getElementById('pagination-numbers');
+            
             try {
-                const res = await fetch('/api/themes');
-                if (!res.ok) throw new Error('Failed to fetch themes');
-                const themes = await res.json();
+                const offset = (currentPage - 1) * themesPerPage;
+                const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}`);
+                const data = await res.json(); // data includes {results: [], total: X}
                 
-                if (themes.length === 0) {
-                    gallery.innerHTML = '<p>No themes found.</p>';
-                    return;
-                }
-
-                gallery.innerHTML = themes.map(t => `
+                // 1. Render Gallery
+                gallery.innerHTML = data.results.map(t => `
                     <div class="card">
                         <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
                         <div class="card-body">
@@ -111,9 +75,24 @@
                         </div>
                     </div>
                 `).join('');
-            } catch (err) { 
-                gallery.innerHTML = '<p>Error loading themes. Please try again later.</p>';
+
+                // 2. Render Numbered Buttons
+                const totalPages = Math.ceil(data.total / themesPerPage);
+                let btnHtml = '';
+                for (let i = 1; i <= totalPages; i++) {
+                    btnHtml += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+                }
+                pagination.innerHTML = btnHtml;
+
+            } catch (err) {
+                gallery.innerHTML = '<p>Error loading themes.</p>';
             }
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            loadThemes();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function switchTab(event, tabId) {
@@ -123,24 +102,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        document.getElementById('subscribeForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const payload = {
-                email: document.getElementById('subEmail').value,
-                country: document.getElementById('subCountry').value
-            };
-            try {
-                const res = await fetch('/api/subscribe', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                if (res.ok) { alert("Successfully Subscribed!"); e.target.reset(); }
-            } catch (error) { console.error("Error:", error); }
-        };
-
         loadThemes();
     </script>
 </body>
 </html>
-
