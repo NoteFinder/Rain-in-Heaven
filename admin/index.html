@@ -3,58 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Rain In Heaven</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Rain In Heaven | Admin Dashboard</title>
+    <link rel="stylesheet" href="../style.css">
     <style>
-        .admin-section { background: white; padding: 30px; border-radius: 20px; margin-bottom: 40px; border: 2px solid var(--card-border); }
+        .admin-section { background: white; padding: 30px; border-radius: 25px; margin-bottom: 40px; border: 2px solid var(--card-border); }
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
         .btn-download { background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.7rem; }
-        .btn-delete { background: #ff4d4d; color: white; border: none; padding: 6px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .login-container { max-width: 400px; margin: 100px auto; text-align: center; padding: 40px; background: white; border-radius: 30px; border: 2px solid var(--card-border); }
+        input { font-family: var(--font-body); width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; box-sizing: border-box; }
     </style>
 </head>
-<body>
+<body style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
 
     <div id="login-box" class="login-container">
-        <h2 style="color: var(--primary); margin-bottom: 20px;">Admin Login</h2>
-        <input type="password" id="pass" placeholder="Enter Password" class="sub-input" style="text-align: center;">
-        <button onclick="checkPass()" class="tab-btn active" style="width: 100%; margin-top: 15px;">Login</button>
+        <h2 style="color: var(--primary); font-family: var(--font-heading); margin-bottom: 20px;">Admin Login</h2>
+        <input type="password" id="pass" placeholder="Enter Access Code" style="text-align: center;">
+        <button onclick="checkPass()" class="tab-btn active" style="width: 100%; margin-top: 15px; cursor: pointer;">Login</button>
     </div>
 
-    <div id="admin-panel" class="container" style="display: none; margin-top: 50px;">
-        
+    <div id="admin-panel" style="display: none; width: 100%; max-width: 800px;" class="about-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-            <h2 style="color: var(--primary); margin: 0;">Admin Dashboard</h2>
+            <h2 style="color: var(--primary); margin: 0; font-family: var(--font-heading);">Admin Dashboard</h2>
             <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px;">← Return to Site</a>
         </div>
 
         <div class="admin-section">
-            <h3 style="color: var(--primary);">Add Local Theme</h3>
+            <h3 style="color: var(--primary); font-family: var(--font-heading);">Add New Theme</h3>
             <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">
                 1. Upload photo to <strong>/img/</strong> on GitHub.<br>
-                2. Enter the exact filename below (e.g., <em>pajama_party.jpg</em>).
+                2. Enter filename (e.g., <em>pajama_party.jpg</em>).
             </p>
-            
             <form id="themeForm" style="display: flex; flex-direction: column; gap: 12px;">
-                <input type="text" id="name" placeholder="Theme Name" class="sub-input" required>
-                <input type="text" id="desc" placeholder="Description" class="sub-input" required>
-                <input type="text" id="imageName" placeholder="Filename (e.g. phola_cozy.jpg)" class="sub-input" required>
-                <input type="url" id="tryLink" placeholder="Samsung Trial Link" class="sub-input" required>
-                <input type="url" id="buyLink" placeholder="Samsung Buy Link" class="sub-input" required>
-                <button type="submit" class="tab-btn active">Save Theme to Site</button>
+                <input type="text" id="name" placeholder="Theme Name" required>
+                <input type="text" id="desc" placeholder="Description" required>
+                <input type="text" id="imageName" placeholder="Filename (e.g. phola_cozy.jpg)" required>
+                <input type="url" id="tryLink" placeholder="Samsung Trial Link" required>
+                <input type="url" id="buyLink" placeholder="Samsung Buy Link" required>
+                <button type="submit" class="tab-btn active" style="cursor: pointer;">Save Theme to Gallery</button>
             </form>
-            <p id="status" style="margin-top:15px; font-weight:bold; color: var(--primary);"></p>
-        </div>
-
-        <div class="admin-section">
-            <h3 style="color: var(--primary);">Live Themes</h3>
-            <div id="admin-theme-list">Loading themes...</div>
+            <p id="status" style="margin-top:10px; font-weight:bold; color: var(--primary);"></p>
         </div>
 
         <div class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h3 style="color: var(--primary);">Newsletter Subscribers</h3>
+                <h3 style="color: var(--primary); font-family: var(--font-heading);">Newsletter Subscribers</h3>
                 <button onclick="downloadCSV()" class="btn-download">Download CSV</button>
             </div>
             <table class="admin-table">
@@ -70,47 +63,60 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="admin-section">
+            <h3 style="color: var(--primary); font-family: var(--font-heading);">Live Themes</h3>
+            <div id="admin-theme-list">Loading...</div>
+        </div>
     </div>
 
     <script>
-        // 1. Password Protection
+        // Password Logic
         function checkPass() {
-            const pass = document.getElementById('pass').value;
-            if (pass === "021603") {
+            if (document.getElementById('pass').value === "021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 loadAdminThemes();
                 loadSubscribers();
             } else {
-                alert("Incorrect password. Access denied.");
+                alert("Wrong Password");
             }
         }
 
-        // 2. Load & Manage Themes
+        // Load Subscribers
+        async function loadSubscribers() {
+            const res = await fetch('/api/subscribers');
+            const subs = await res.json();
+            window.currentSubs = subs;
+            document.getElementById('sub-list').innerHTML = subs.map(s => `
+                <tr>
+                    <td>${s.email}</td>
+                    <td>${s.country || 'Global'}</td>
+                    <td>${new Date(s.created_at).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Load & Delete Themes
         async function loadAdminThemes() {
             const res = await fetch('/api/themes');
             const themes = await res.json();
-            const list = document.getElementById('admin-theme-list');
-            list.innerHTML = themes.map(t => `
+            document.getElementById('admin-theme-list').innerHTML = themes.map(t => `
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;">
                     <span><strong>${t.name}</strong> (${t.image})</span>
-                    <button onclick="deleteTheme(${t.id})" class="btn-delete">Delete</button>
+                    <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:6px 15px; border-radius:15px; cursor:pointer; font-weight:bold;">Delete</button>
                 </div>
             `).join('');
         }
 
         async function deleteTheme(id) {
-            if (confirm("Delete this theme from the database? (Note: The image file remains on GitHub)")) {
-                const res = await fetch('/api/delete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id })
-                });
-                if (res.ok) loadAdminThemes();
+            if (confirm("Delete this theme from database?")) {
+                await fetch('/api/delete', { method: 'POST', body: JSON.stringify({ id }) });
+                loadAdminThemes();
             }
         }
 
-        // 3. Add Theme Handler
+        // Add Theme
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const themeData = {
@@ -120,13 +126,11 @@
                 try_link: document.getElementById('tryLink').value,
                 link: document.getElementById('buyLink').value
             };
-
-            const res = await fetch('/api/themes', {
+            const res = await fetch('/api/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(themeData)
             });
-
             if (res.ok) {
                 document.getElementById('status').innerText = "Theme saved successfully!";
                 e.target.reset();
@@ -134,26 +138,10 @@
             }
         };
 
-        // 4. Subscriber Management
-        async function loadSubscribers() {
-            const res = await fetch('/api/subscribers');
-            const subs = await res.json();
-            window.currentSubs = subs;
-            const list = document.getElementById('sub-list');
-            list.innerHTML = subs.map(s => `
-                <tr>
-                    <td>${s.email}</td>
-                    <td>${s.country || 'Global'}</td>
-                    <td>${new Date(s.created_at).toLocaleDateString()}</td>
-                </tr>
-            `).join('');
-        }
-
+        // CSV Export
         function downloadCSV() {
             let csv = "Email,Country,Date Joined\n";
-            window.currentSubs.forEach(s => {
-                csv += `${s.email},${s.country},${s.created_at}\n`;
-            });
+            window.currentSubs.forEach(s => { csv += `${s.email},${s.country},${s.created_at}\n`; });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
