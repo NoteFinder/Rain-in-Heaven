@@ -34,14 +34,20 @@
                     <h3 class="dedication-name">Rain Justin</h3>
                     "Every creation is a reflection of the eternal love and light he brought into our lives."
                 </blockquote>
-                <hr class="divider">
-                <h2>Galaxy Theme Store Designer</h2>
-                <h3 class="maker-name">Greta Rose Q. Sebua</h3>
-                <p class="contact-info">0916 239 2794 | gsebua@gmail.com</p>
                 <div class="social-links">
                     <a href="https://apps.samsung.com/theme/SellerProductList.as?id=000000059112" target="_blank"><img src="img/samsung_logo.png" class="social-icon"></a>
                     <a href="https://facebook.com/dcbraininheaven" target="_blank"><img src="img/facebook_logo.png" class="social-icon"></a>
                     <a href="https://www.youtube.com/c/RainHeaven" target="_blank"><img src="img/youtube_logo.png" class="social-icon"></a>
+                </div>
+                <div class="subscribe-section">
+                    <h2>Subscribe</h2>
+                    <form id="subscribeForm">
+                        <input type="email" id="subEmail" class="sub-input" placeholder="Email" required>
+                        <select id="subCountry" class="sub-input" required>
+                            <option value="">Select Country...</option>
+                        </select>
+                        <button type="submit" class="btn-subscribe">Subscribe Now</button>
+                    </form>
                 </div>
             </div>
         </section>
@@ -50,18 +56,16 @@
     <script>
         const IMG_PATH = "img/";
         let currentPage = 1;
-        const themesPerPage = 8; // 2 rows of 4 on PC
+        const themesPerPage = 8;
 
         async function loadThemes() {
             const gallery = document.getElementById('themes-gallery');
             const pagination = document.getElementById('pagination-numbers');
-            
             try {
                 const offset = (currentPage - 1) * themesPerPage;
                 const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}`);
-                const data = await res.json(); // data includes {results: [], total: X}
+                const data = await res.json();
                 
-                // 1. Render Gallery
                 gallery.innerHTML = data.results.map(t => `
                     <div class="card">
                         <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
@@ -76,17 +80,13 @@
                     </div>
                 `).join('');
 
-                // 2. Render Numbered Buttons
                 const totalPages = Math.ceil(data.total / themesPerPage);
                 let btnHtml = '';
                 for (let i = 1; i <= totalPages; i++) {
                     btnHtml += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
                 }
                 pagination.innerHTML = btnHtml;
-
-            } catch (err) {
-                gallery.innerHTML = '<p>Error loading themes.</p>';
-            }
+            } catch (err) { gallery.innerHTML = '<p>Error loading themes.</p>'; }
         }
 
         function goToPage(page) {
@@ -101,6 +101,28 @@
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
+
+        document.getElementById('subscribeForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                email: document.getElementById('subEmail').value,
+                country: document.getElementById('subCountry').value
+            };
+            const res = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (res.ok) { alert("Successfully Subscribed!"); e.target.reset(); }
+        };
+
+        const countries = ["Philippines", "United States", "South Korea", "Japan", "Other"];
+        const select = document.getElementById('subCountry');
+        countries.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c; opt.textContent = c;
+            select.appendChild(opt);
+        });
 
         loadThemes();
     </script>
