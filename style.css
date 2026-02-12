@@ -214,4 +214,20 @@ body {
     }
 }
 
+/* Page Number Styling */
+#pagination-numbers .tab-btn {
+    font-size: 0.9rem;
+    border: 1px solid var(--card-border);
+    background: white;
+    color: var(--primary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#pagination-numbers .tab-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
 
