@@ -1,15 +1,26 @@
-export async function onRequest(context) {
-  const { env } = context;
+export async function onRequestGet(context) {
+  const { env, request } = context;
+  const url = new URL(request.url);
+  
+  const limit = parseInt(url.searchParams.get('limit')) || 8;
+  const offset = parseInt(url.searchParams.get('offset')) || 0;
 
   try {
-    const { results } = await env.DB.prepare(
-      "SELECT * FROM themes ORDER BY id DESC"
-    ).all();
+    // Get the themes for the current page
+    const themes = await env.DB.prepare(
+      "SELECT * FROM themes ORDER BY id DESC LIMIT ? OFFSET ?"
+    ).bind(limit, offset).all();
 
-    return new Response(JSON.stringify(results), {
-      headers: { "Content-Type": "application/json" },
+    // Get total count for pagination math
+    const countResult = await env.DB.prepare("SELECT COUNT(*) as total FROM themes").first();
+
+    return new Response(JSON.stringify({
+      results: themes.results,
+      total: countResult.total
+    }), {
+      headers: { "Content-Type": "application/json" }
     });
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  } catch (err) {
+    return new Response(err.message, { status: 500 });
   }
 }
