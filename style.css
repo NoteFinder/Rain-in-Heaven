@@ -154,12 +154,22 @@ body {
 
 /* GALLERY */
 
-.gallery { display: grid; grid-template-columns: repeat(auto-fit, 230px); gap: 35px; justify-content: center; }
-
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 per row on mobile */
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
 .card { background: var(--card-bg); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column; }
 
-.card-img { width: 100%; aspect-ratio: 9 / 16; background-size: cover; background-position: center; }
-
+.card-img {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px 15px 0 0;
+}
 .card-body h3 { font-size: 1.2rem !important; margin: 10px 0 !important; }
 
 /* Card Body and Action Container */
@@ -197,5 +207,11 @@ body {
     color: white;
 }
 
+@media (min-width: 1024px) {
+    .gallery {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+    }
+}
 
 
