@@ -2,83 +2,131 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Rain In Heaven | Admin</title>
-    <link rel="stylesheet" href="../style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Rain In Heaven</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-section { background: white; padding: 30px; border-radius: 20px; margin-bottom: 40px; border: 1px solid var(--card-border); }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
+        .btn-download { background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; margin-bottom: 15px; font-weight: bold; font-family: var(--font-body); text-transform: uppercase; font-size: 0.8rem; }
+        .btn-delete { background: #ff4d4d; color: white; border: none; padding: 5px 12px; border-radius: 15px; cursor: pointer; font-size: 0.7rem; }
+        input::placeholder { color: #ccc; }
+    </style>
 </head>
-<body style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
+<body style="display: none;" id="adminBody"> <div class="container" style="margin-top: 50px;">
+        <h1 class="maker-name" style="font-size: 2.5rem; text-align: center; color: var(--primary);">Management Dashboard</h1>
 
-    <div id="login-box" class="about-card" style="max-width: 400px; text-align: center; margin-top: 50px;">
-        <h2 style="color: var(--primary);">Admin Access</h2>
-        <input type="password" id="pass" placeholder="Enter Password" style="padding: 12px; border-radius: 10px; border: 1px solid var(--primary); width: 80%; margin-bottom: 20px;">
-        <button onclick="checkPass()" class="tab-btn active">Login</button>
-    </div>
-
-    <div id="admin-panel" style="display: none; width: 100%; max-width: 700px;" class="about-card">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-            <h2 style="color: var(--primary); margin: 0;">Admin Dashboard</h2>
-            <a href="../" style="text-decoration: none; font-weight: bold; color: var(--primary);">← Return to Site</a>
+        <div class="admin-section">
+            <h2 class="section-title" style="color: var(--primary); font-family: var(--font-heading);">Add New Theme</h2>
+            <form id="themeForm" style="display: grid; gap: 15px; margin-top: 20px;">
+                <input type="text" id="name" placeholder="Theme Name" class="sub-input" required>
+                <input type="text" id="desc" placeholder="Short Description" class="sub-input" required>
+                <input type="text" id="img" placeholder="Filename in img/ folder (e.g. sunset.jpg)" class="sub-input" required>
+                <input type="url" id="try" placeholder="Galaxy Store 'Try' Link" class="sub-input" required>
+                <input type="url" id="buy" placeholder="Galaxy Store 'Buy' Link" class="sub-input" required>
+                <button type="submit" class="btn-subscribe" style="background: var(--primary);">Add to Gallery</button>
+            </form>
         </div>
 
-        <h3>Add New Theme</h3>
-        <form id="themeForm" style="display: flex; flex-direction: column; gap: 12px;">
-            <input type="text" id="name" placeholder="Theme Name" required>
-            <input type="text" id="desc" placeholder="Description" required>
-            <input type="text" id="imageName" placeholder="Filename (e.g. pajama_party.jpg)" required>
-            <input type="text" id="tryLink" placeholder="Trial Link" required>
-            <input type="text" id="buyLink" placeholder="Buy Link" required>
-            <button type="submit" class="tab-btn active">Save to Database</button>
-        </form>
-        <p id="status" style="margin-top:10px; font-weight:bold;"></p>
-
-        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
-        <h3>Live Themes</h3>
-        <div id="admin-theme-list">Loading...</div>
+        <div class="admin-section">
+            <h2 class="section-title" style="color: var(--primary); font-family: var(--font-heading); margin-bottom: 15px;">Newsletter Subscribers</h2>
+            <button onclick="downloadCSV()" class="btn-download">Download CSV for Excel</button>
+            <div style="overflow-x: auto;">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Email Address</th>
+                            <th>Country</th>
+                            <th>Date Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sub-list">
+                        <tr><td colspan="3">Fetching subscribers...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        function checkPass() {
-            if (document.getElementById('pass').value === "021603") {
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('admin-panel').style.display = 'block';
-                loadAdminThemes();
-            } else { alert("Wrong Password"); }
+        // 1. PASSWORD PROTECTION
+        const AUTH_PASS = "021603"; // Change this to Greta's preferred password
+        const entry = prompt("Please enter the administrator password:");
+
+        if (entry === AUTH_PASS) {
+            document.getElementById('adminBody').style.display = 'block';
+            loadData();
+        } else {
+            alert("Unauthorized access.");
+            window.location.href = "/"; // Redirect to home
         }
 
-        async function loadAdminThemes() {
-            const res = await fetch('/api/themes');
-            const themes = await res.json();
-            const list = document.getElementById('admin-theme-list');
-            list.innerHTML = themes.map(t => `
-                <div style="display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid #eee;">
-                    <span>${t.name}</span>
-                    <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Delete</button>
-                </div>
-            `).join('');
-        }
+        // 2. LOAD SUBSCRIBERS FROM D1
+        async function loadData() {
+            try {
+                const res = await fetch('/api/subscribers');
+                const subs = await res.json();
+                const list = document.getElementById('sub-list');
+                
+                if (subs.length === 0) {
+                    list.innerHTML = '<tr><td colspan="3">No subscribers yet.</td></tr>';
+                    return;
+                }
 
-        async function deleteTheme(id) {
-            if (confirm("Delete this theme?")) {
-                await fetch('/api/delete', { method: 'POST', body: JSON.stringify({ id }) });
-                loadAdminThemes();
+                list.innerHTML = subs.map(s => `
+                    <tr>
+                        <td><strong>${s.email}</strong></td>
+                        <td>${s.country || 'Global'}</td>
+                        <td>${new Date(s.created_at).toLocaleDateString()}</td>
+                    </tr>
+                `).join('');
+                window.currentSubs = subs;
+            } catch (err) {
+                console.error("Failed to load subscribers:", err);
             }
         }
 
+        // 3. THEME UPLOAD HANDLER
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
-            const themeData = {
+            const theme = {
                 name: document.getElementById('name').value,
                 description: document.getElementById('desc').value,
-                image: document.getElementById('imageName').value,
-                try_link: document.getElementById('tryLink').value,
-                link: document.getElementById('buyLink').value
+                image: document.getElementById('img').value,
+                try_link: document.getElementById('try').value,
+                link: document.getElementById('buy').value
             };
-            const res = await fetch('/api/add', {
-                method: 'POST',
+            
+            const res = await fetch('/api/themes', { 
+                method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(themeData)
+                body: JSON.stringify(theme) 
             });
-            if (res.ok) { e.target.reset(); loadAdminThemes(); }
+
+            if (res.ok) { 
+                alert("New theme successfully added!"); 
+                location.reload(); 
+            }
         };
+
+        // 4. CSV EXPORT FOR NEWSLETTERS
+        function downloadCSV() {
+            if (!window.currentSubs || window.currentSubs.length === 0) {
+                alert("No data to export.");
+                return;
+            }
+            let csv = "Email,Country,Date Joined\n";
+            window.currentSubs.forEach(s => {
+                csv += `${s.email},${s.country},${s.created_at}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Rain_In_Heaven_Subscribers_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
     </script>
 </body>
 </html>
