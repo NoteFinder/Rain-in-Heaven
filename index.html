@@ -1,118 +1,249 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Designed Creations by Rain In Heaven</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
+
     <section class="hero">
+
         <img src="img/logo.png" alt="Logo" class="hero-logo">
+
         <h2>THEMES BY RAIN IN HEAVEN</h2>
+
     </section>
 
+
+
     <div class="nav-wrapper">
+
         <nav class="tabs">
+
             <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
+
             <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
+
         </nav>
+
     </div>
 
+
+
     <main class="container">
+
         <div id="themes" class="tab-content active">
+
             <div id="themes-gallery" class="gallery">
+
                 <p style="text-align: center; grid-column: span 3;">Loading themes...</p>
+
             </div>
+
         </div>
 
+
+
         <div id="home" class="tab-content">
+
             <div class="about-card">
+
                 <h2>Our Heart & Story</h2>
+
                 <p style="font-style: italic;">"Rain in Heaven Themes was born to honor the memory of my beloved son,"</p>
+
+                
+
                 <h3>Rain Justin</h3>
+
                 <p style="font-style: italic;">"Every creation is a reflection of the eternal love and light he brought into our lives."</p>
+
+
 
                 <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
-                <h2>Galaxy Theme Store Designer</h2>
-                <h3 class="maker-name">Greta Rose Q. Sebua</h3>
-                <p style="font-weight: bold;">0916 239 2794 &nbsp;&nbsp;&nbsp; gsebua@gmail.com</p>
 
-                <div class="social-links" style="display: flex; justify-content: center; gap: 20px; margin: 30px 0;">
-                    <a href="#"><img src="img/samsung_logo.png" style="width: 50px;"></a>
-                    <a href="#"><img src="img/facebook_logo.png" style="width: 50px;"></a>
-                    <a href="#"><img src="img/youtube_logo.png" style="width: 50px;"></a>
+
+                <h2>Galaxy Theme Store Designer</h2>
+
+                
+
+                <h3 class="maker-name">Greta Rose Q. Sebua</h3>
+
+                
+
+                <p><strong>0916 239 2794     gsebua@gmail.com</strong></p>
+
+
+
+                <div class="social-links">
+
+                    <a href="#" target="_blank"><img src="img/samsung_logo.png" class="social-icon" alt="Samsung"></a>
+
+                    <a href="#" target="_blank"><img src="img/facebook_logo.png" class="social-icon" alt="Facebook"></a>
+
+                    <a href="#" target="_blank"><img src="img/youtube_logo.png" class="social-icon" alt="YouTube"></a>
+
                 </div>
+
+
 
                 <div class="subscribe-section">
+
                     <h2>Subscribe</h2>
+
                     <p style="text-align: center; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px;">WEEKLY NEWSLETTER UPDATES</p>
+
+                    
+
                     <form id="subscribeForm" style="margin-top: 20px;">
-                        <input type="email" id="subEmail" class="sub-input" placeholder="Email Address" required>
+
+                        <label style="font-weight: 700;">Email Address *</label>
+
+                        <input type="email" id="subEmail" class="sub-input" required>
+
+                        
+
+                        <label style="font-weight: 700;">Country *</label>
+
                         <select id="subCountry" class="sub-input" required>
+
                             <option value="">Select your country...</option>
+
                         </select>
+
+                        
+
                         <button type="submit" class="btn-subscribe">Subscribe Now</button>
+
                     </form>
+
                 </div>
+
             </div>
+
         </div>
+
     </main>
 
+
+
     <script>
+
         const IMG_PATH = "img/";
 
+
+
         // Populate Countries
-        const countries = ["Philippines", "United States", "South Korea", "Japan", "Other"];
+
+        const countries = ["Philippines", "United States", "South Korea", "Japan", "United Kingdom", "Canada", "Australia", "Other"];
+
         const select = document.getElementById('subCountry');
+
         countries.forEach(c => {
+
             let opt = document.createElement('option');
+
             opt.value = c; opt.innerHTML = c;
+
             select.appendChild(opt);
+
         });
 
+
+
         // Load Gallery
+
         async function loadThemes() {
+
             try {
+
                 const res = await fetch('/api/themes');
+
                 const themes = await res.json();
+
                 const gallery = document.getElementById('themes-gallery');
+
                 gallery.innerHTML = themes.map(t => `
+
                     <div class="card">
+
                         <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
+
                         <div class="card-body">
-                            <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 10px;">${t.name}</h3>
-                            <div style="display: flex; gap: 10px;">
+
+                            <h3>${t.name}</h3>
+
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+
                                 <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
+
                                 <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
+
                             </div>
+
                         </div>
+
                     </div>
+
                 `).join('');
+
             } catch (err) { console.error(err); }
+
         }
+
+
 
         function switchTab(event, tabId) {
+
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
             document.getElementById(tabId).classList.add('active');
+
             event.currentTarget.classList.add('active');
+
         }
-        
+
         loadThemes();
 
+
+
         document.getElementById('subscribeForm').onsubmit = async (e) => {
+
             e.preventDefault();
+
             const res = await fetch('/api/subscribe', {
+
                 method: 'POST',
+
                 body: JSON.stringify({
+
                     email: document.getElementById('subEmail').value,
+
                     country: document.getElementById('subCountry').value
+
                 })
+
             });
+
             if (res.ok) { alert("Successfully Subscribed!"); e.target.reset(); }
+
         };
+
     </script>
+
 </body>
+
 </html>
