@@ -19,11 +19,16 @@
         </nav>
     </div>
 
-    <main class="container">
-        <section id="themes" class="tab-content active">
-            <div id="themes-gallery" class="gallery">
-                <p class="status-msg">Loading themes...</p>
+        <div class="container">
+            <div id="theme-gallery" class="gallery">
+                </div>
+        
+            <div class="pagination-controls">
+                <button id="prevPage" class="btn-small" onclick="changePage(-1)">Previous</button>
+                <span id="pageNumber" class="page-indicator">Page 1</span>
+                <button id="nextPage" class="btn-small" onclick="changePage(1)">Next</button>
             </div>
+        </div>
         </section>
 
         <section id="home" class="tab-content">
@@ -166,6 +171,7 @@
     </script>
 </body>
 </html>
+
 
 
 
