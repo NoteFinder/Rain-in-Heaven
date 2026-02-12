@@ -330,71 +330,20 @@
 
 
 
-        async function loadThemes() {
-
-
-
-            try {
-
-
-
-                const res = await fetch('/api/themes');
-
-
-
-                const themes = await res.json();
-
-
-
-                const gallery = document.getElementById('themes-gallery');
-
-
-
-                gallery.innerHTML = themes.map(t => `
-
-
-
-                    <div class="card">
-
-
-
-                        <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
-
-
-
-                        <div class="card-body">
-
-
-
-                            <h3>${t.name}</h3>
-
-
-
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
-
-
-
-                                <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
-
-
-
-                                <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
-
-
-
-                            </div>
-
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-
-                `).join('');
+gallery.innerHTML = themes.map(t => `
+    <div class="card">
+        <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
+        <div class="card-body">
+            <h3>${t.name}</h3>
+            <p style="font-size: 0.8rem; color: #666; margin-bottom: 10px;">${t.description}</p>
+            
+            <div style="display: flex; gap: 10px; margin-top: auto;">
+                <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
+                <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
+            </div>
+        </div>
+    </div>
+`).join('');
 
 
 
@@ -495,3 +444,4 @@
 
 
 </html>
+
