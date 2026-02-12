@@ -11,11 +11,17 @@
         <img src="img/logo.png" alt="Logo" class="hero-logo">
     </header>
 
-    <div class="nav-wrapper">
-        <nav class="tabs">
+    <div class="nav-wrapper" style="max-width: 800px; display: flex; align-items: center; gap: 15px;">
+        <nav class="tabs" style="flex-shrink: 0;">
             <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
             <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
         </nav>
+        
+        <div class="search-container" style="flex-grow: 1; position: relative;">
+            <input type="text" id="themeSearch" placeholder="Search themes..." 
+                   style="width: 100%; padding: 10px 15px; border-radius: 25px; border: 2px solid var(--card-border); outline: none;"
+                   onkeyup="filterThemes()">
+        </div>
     </div>
 
     <main class="container">
@@ -129,5 +135,6 @@
     </script>
 </body>
 </html>
+
 
 
