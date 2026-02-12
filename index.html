@@ -64,21 +64,22 @@ const IMG_PATH = "img/";
 let currentPage = 1;
 const themesPerPage = 8; 
 
+let searchQuery = ""; // Track search state globally
+
 async function loadThemes() {
     const gallery = document.getElementById('themes-gallery');
     const pagination = document.getElementById('pagination-numbers');
     
     try {
         const offset = (currentPage - 1) * themesPerPage;
-        // Fetching from the API with pagination params
-        const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}`);
-        const data = await res.json(); 
+        // Include the search query in the API call
+        const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}&search=${searchQuery}`);
+        const data = await res.json();
         
-        // Use data.results because the Worker now returns an object
         const themes = data.results || [];
 
         if (themes.length === 0) {
-            gallery.innerHTML = '<p class="status-msg">No themes found.</p>';
+            gallery.innerHTML = '<p class="status-msg">No matches found for your search.</p>';
             pagination.innerHTML = '';
             return;
         }
@@ -97,7 +98,6 @@ async function loadThemes() {
             </div>
         `).join('');
 
-        // Handle Pagination Buttons
         const totalPages = Math.ceil(data.total / themesPerPage);
         let btnHtml = '';
         for (let i = 1; i <= totalPages; i++) {
@@ -106,20 +106,15 @@ async function loadThemes() {
         pagination.innerHTML = btnHtml;
 
     } catch (err) {
-        console.error("Load Error:", err);
-        gallery.innerHTML = '<p class="status-msg">Error loading themes. Please refresh.</p>';
+        gallery.innerHTML = '<p class="status-msg">Error searching themes.</p>';
     }
 }
 
-// Search Filtering (Local Page Search)
+// Optimized Search Logic
 function filterThemes() {
-    const query = document.getElementById('themeSearch').value.toLowerCase();
-    const cards = document.querySelectorAll('#themes-gallery .card');
-
-    cards.forEach(card => {
-        const themeName = card.querySelector('h3').innerText.toLowerCase();
-        card.style.display = themeName.includes(query) ? "block" : "none";
-    });
+    searchQuery = document.getElementById('themeSearch').value;
+    currentPage = 1; // Reset to page 1 for new searches
+    loadThemes(); // Fetch fresh results from the database
 }
 
         function goToPage(page) {
@@ -161,6 +156,7 @@ function filterThemes() {
     </script>
 </body>
 </html>
+
 
 
 
