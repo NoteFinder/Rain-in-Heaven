@@ -103,14 +103,21 @@
 
         // 3. Load & Delete Themes (Includes Pagination Support)
         async function loadAdminThemes() {
+            const list = document.getElementById('admin-theme-list');
             try {
                 // Fetch all themes for management
                 const res = await fetch('/api/themes?limit=100'); 
                 const data = await res.json();
-                // Check if response is wrapped in 'results' or direct array
-                const themes = data.results || data; 
                 
-                document.getElementById('admin-theme-list').innerHTML = themes.map(t => `
+                // Fix: Use data.results because the API now returns an object
+                const themes = data.results || data; 
+        
+                if (!themes || themes.length === 0) {
+                    list.innerHTML = '<p style="text-align:center;">No live themes found.</p>';
+                    return;
+                }
+        
+                list.innerHTML = themes.map(t => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;">
                         <span><strong>${t.name}</strong> (${t.image})</span>
                         <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:6px 15px; border-radius:15px; cursor:pointer; font-weight:bold;">Delete</button>
@@ -118,6 +125,7 @@
                 `).join('');
             } catch (err) {
                 console.error("Error loading themes:", err);
+                list.innerHTML = '<p style="text-align:center; color:red;">Error loading themes. Check console.</p>';
             }
         }
 
@@ -171,3 +179,4 @@
     </script>
 </body>
 </html>
+
