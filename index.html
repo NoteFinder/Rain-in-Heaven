@@ -71,7 +71,7 @@
     <script>
         const IMG_PATH = "img/";
 
-        // 1. Populate Countries
+        // Populate Countries
         const countries = ["Philippines", "United States", "South Korea", "Japan", "United Kingdom", "Canada", "Australia", "Other"];
         const select = document.getElementById('subCountry');
         countries.forEach(c => {
@@ -80,7 +80,7 @@
             select.appendChild(opt);
         });
 
-        // 2. Load Gallery
+        // Load Gallery
         async function loadThemes() {
             try {
                 const res = await fetch('/api/themes');
