@@ -186,8 +186,8 @@
                 <div class="card">
                     <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
                     <div class="card-body">
-                        <h3>${t.name}</h3>
-                        <p class="theme-desc">${t.description || 'No description available.'}</p>
+                        <h3 style="font-size: 1.1rem; margin: 5px 0;">${t.name}</h3>
+                        <p class="theme-desc" style="font-size: 0.8rem; color: #777;">${t.description || ''}</p>
                         <div class="btn-group">
                             <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
                             <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
@@ -237,4 +237,5 @@
     </script>
 </body>
 </html>
+
 
