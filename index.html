@@ -30,37 +30,29 @@
             <div class="about-card">
                 <h2>Our Heart & Story</h2>
                 <p style="font-style: italic;">"Rain in Heaven Themes was born to honor the memory of my beloved son,"</p>
-                
                 <h3>Rain Justin</h3>
                 <p style="font-style: italic;">"Every creation is a reflection of the eternal love and light he brought into our lives."</p>
 
                 <hr style="border: 0; border-top: 1px solid var(--card-border); margin: 40px 0;">
 
                 <h2>Galaxy Theme Store Designer</h2>
-                
                 <h3 class="maker-name">Greta Rose Q. Sebua</h3>
-                
-                <p><strong>0916 239 2794     gsebua@gmail.com</strong></p>
+                <p style="font-weight: bold;">0916 239 2794 &nbsp;&nbsp;&nbsp; gsebua@gmail.com</p>
 
-                <div class="social-links">
-                    <a href="#" target="_blank"><img src="img/samsung_logo.png" class="social-icon" alt="Samsung"></a>
-                    <a href="#" target="_blank"><img src="img/facebook_logo.png" class="social-icon" alt="Facebook"></a>
-                    <a href="#" target="_blank"><img src="img/youtube_logo.png" class="social-icon" alt="YouTube"></a>
+                <div class="social-links" style="display: flex; justify-content: center; gap: 20px; margin: 30px 0;">
+                    <a href="#"><img src="img/samsung_logo.png" style="width: 50px;"></a>
+                    <a href="#"><img src="img/facebook_logo.png" style="width: 50px;"></a>
+                    <a href="#"><img src="img/youtube_logo.png" style="width: 50px;"></a>
                 </div>
 
                 <div class="subscribe-section">
                     <h2>Subscribe</h2>
                     <p style="text-align: center; font-weight: bold; font-size: 0.8rem; letter-spacing: 1px;">WEEKLY NEWSLETTER UPDATES</p>
-                    
                     <form id="subscribeForm" style="margin-top: 20px;">
-                        <label style="font-weight: 700;">Email Address *</label>
-                        <input type="email" id="subEmail" class="sub-input" required>
-                        
-                        <label style="font-weight: 700;">Country *</label>
+                        <input type="email" id="subEmail" class="sub-input" placeholder="Email Address" required>
                         <select id="subCountry" class="sub-input" required>
                             <option value="">Select your country...</option>
                         </select>
-                        
                         <button type="submit" class="btn-subscribe">Subscribe Now</button>
                     </form>
                 </div>
@@ -72,7 +64,7 @@
         const IMG_PATH = "img/";
 
         // Populate Countries
-        const countries = ["Philippines", "United States", "South Korea", "Japan", "United Kingdom", "Canada", "Australia", "Other"];
+        const countries = ["Philippines", "United States", "South Korea", "Japan", "Other"];
         const select = document.getElementById('subCountry');
         countries.forEach(c => {
             let opt = document.createElement('option');
@@ -90,8 +82,8 @@
                     <div class="card">
                         <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
                         <div class="card-body">
-                            <h3>${t.name}</h3>
-                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <h3 style="font-size: 1.1rem; color: var(--primary); margin-bottom: 10px;">${t.name}</h3>
+                            <div style="display: flex; gap: 10px;">
                                 <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
                                 <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
                             </div>
@@ -107,6 +99,7 @@
             document.getElementById(tabId).classList.add('active');
             event.currentTarget.classList.add('active');
         }
+        
         loadThemes();
 
         document.getElementById('subscribeForm').onsubmit = async (e) => {
@@ -123,4 +116,3 @@
     </script>
 </body>
 </html>
-
