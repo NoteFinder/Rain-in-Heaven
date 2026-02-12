@@ -81,3 +81,43 @@ body {
 .card { background: var(--card-bg); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column; }
 .card-img { width: 100%; aspect-ratio: 9 / 16; background-size: cover; background-position: center; }
 .card-body h3 { font-size: 1.2rem !important; margin: 10px 0 !important; }
+
+
+/* BUTTON STYLES FOR THEMES */
+.card-body {
+    padding: 15px;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn-small {
+    flex: 1;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 10px 0;
+    border-radius: 20px;
+    text-align: center;
+    transition: 0.3s;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: transparent;
+}
+
+.btn-small:hover {
+    background: var(--card-border);
+}
+
+.btn-small.primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-small.primary:hover {
+    background: #f187ab; /* Slightly darker pink for hover */
+    border-color: #f187ab;
+}
