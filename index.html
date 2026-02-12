@@ -60,54 +60,67 @@
     </main>
 
     <script>
-                // Search Filtering Logic
-                function filterThemes() {
-                    const query = document.getElementById('themeSearch').value.toLowerCase();
-                    const cards = document.querySelectorAll('#themes-gallery .card');
-                    
-                    cards.forEach(card => {
-                        const themeName = card.querySelector('h3').innerText.toLowerCase();
-                        // Hide cards that don't match the search query
-                        if (themeName.includes(query)) {
-                            card.style.display = "block";
-                        } else {
-                            card.style.display = "none";
-                        }
-                    });
-                }
-        const IMG_PATH = "img/";
-        let currentPage = 1;
-        const themesPerPage = 8;
+const IMG_PATH = "img/";
+let currentPage = 1;
+const themesPerPage = 8; 
 
-        async function loadThemes() {
-            const gallery = document.getElementById('themes-gallery');
-            const pagination = document.getElementById('pagination-numbers');
-            try {
-                const offset = (currentPage - 1) * themesPerPage;
-                const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}`);
-                const data = await res.json();
-                
-                gallery.innerHTML = data.results.map(t => `
-                    <div class="card">
-                        <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
-                        <div class="card-body">
-                            <h3>${t.name}</h3>
-                            <p class="theme-desc">${t.description || ''}</p> 
-                            <div class="card-actions">
-                                <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
-                                <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-                const totalPages = Math.ceil(data.total / themesPerPage);
-                let btnHtml = '';
-                for (let i = 1; i <= totalPages; i++) {
-                    btnHtml += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
-                }
-                pagination.innerHTML = btnHtml;
-            } catch (err) { gallery.innerHTML = '<p>Error loading themes.</p>'; }
+async function loadThemes() {
+    const gallery = document.getElementById('themes-gallery');
+    const pagination = document.getElementById('pagination-numbers');
+    
+    try {
+        const offset = (currentPage - 1) * themesPerPage;
+        // Fetching from the API with pagination params
+        const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}`);
+        const data = await res.json(); 
+        
+        // Use data.results because the Worker now returns an object
+        const themes = data.results || [];
+
+        if (themes.length === 0) {
+            gallery.innerHTML = '<p class="status-msg">No themes found.</p>';
+            pagination.innerHTML = '';
+            return;
         }
+
+        gallery.innerHTML = themes.map(t => `
+            <div class="card">
+                <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
+                <div class="card-body">
+                    <h3>${t.name}</h3>
+                    <p class="theme-desc">${t.description || ''}</p> 
+                    <div class="card-actions">
+                        <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
+                        <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Handle Pagination Buttons
+        const totalPages = Math.ceil(data.total / themesPerPage);
+        let btnHtml = '';
+        for (let i = 1; i <= totalPages; i++) {
+            btnHtml += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+        }
+        pagination.innerHTML = btnHtml;
+
+    } catch (err) {
+        console.error("Load Error:", err);
+        gallery.innerHTML = '<p class="status-msg">Error loading themes. Please refresh.</p>';
+    }
+}
+
+// Search Filtering (Local Page Search)
+function filterThemes() {
+    const query = document.getElementById('themeSearch').value.toLowerCase();
+    const cards = document.querySelectorAll('#themes-gallery .card');
+
+    cards.forEach(card => {
+        const themeName = card.querySelector('h3').innerText.toLowerCase();
+        card.style.display = themeName.includes(query) ? "block" : "none";
+    });
+}
 
         function goToPage(page) {
             currentPage = page;
@@ -148,6 +161,7 @@
     </script>
 </body>
 </html>
+
 
 
 
