@@ -3,19 +3,18 @@ export async function onRequestPost(context) {
   try {
     const data = await request.json();
     
-    // Save to D1
-    await env.DB.prepare(
-      "INSERT INTO subscribers (email, country, interests) VALUES (?, ?, ?)"
-    ).bind(data.email, data.country, data.interests).run();
-
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { "Content-Type": "application/json" }
-    });
-  } catch (err) {
-    // Handle duplicate emails
-    if (err.message.includes("UNIQUE constraint")) {
-        return new Response("Already subscribed!", { status: 400 });
+    // Check if DB is actually bound
+    if (!env.DB) {
+      return new Response("Database binding 'DB' not found.", { status: 500 });
     }
+
+    await env.DB.prepare(
+      "INSERT INTO subscribers (email, country) VALUES (?, ?)"
+    ).bind(data.email, data.country).run();
+
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  } catch (err) {
+    // This sends the specific error (like "no such table") to your console
     return new Response(err.message, { status: 500 });
   }
 }
