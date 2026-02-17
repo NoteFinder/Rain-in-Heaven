@@ -62,9 +62,8 @@
     <script>
 const IMG_PATH = "img/";
 let currentPage = 1;
+let searchQuery = ""; 
 const themesPerPage = 8; 
-
-let searchQuery = ""; // Track search state globally
 
 async function loadThemes() {
     const gallery = document.getElementById('themes-gallery');
@@ -72,14 +71,13 @@ async function loadThemes() {
     
     try {
         const offset = (currentPage - 1) * themesPerPage;
-        // Include the search query in the API call
         const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}&search=${searchQuery}`);
         const data = await res.json();
         
         const themes = data.results || [];
 
         if (themes.length === 0) {
-            gallery.innerHTML = '<p class="status-msg">No matches found for your search.</p>';
+            gallery.innerHTML = '<p class="status-msg">No themes found.</p>';
             pagination.innerHTML = '';
             return;
         }
@@ -91,8 +89,7 @@ async function loadThemes() {
                     <h3>${t.name}</h3>
                     <p class="theme-desc">${t.description || ''}</p> 
                     <div class="card-actions">
-                        <a href="${t.try_link}" target="_blank" class="btn-small">TRY</a>
-                        <a href="${t.link}" target="_blank" class="btn-small primary">BUY</a>
+                        <a href="${t.try_link}" target="_blank" class="btn-small primary" style="width: 100%;">TRY</a>
                     </div>
                 </div>
             </div>
@@ -106,15 +103,14 @@ async function loadThemes() {
         pagination.innerHTML = btnHtml;
 
     } catch (err) {
-        gallery.innerHTML = '<p class="status-msg">Error searching themes.</p>';
+        gallery.innerHTML = '<p class="status-msg">Error loading themes.</p>';
     }
 }
 
-// Optimized Search Logic
 function filterThemes() {
     searchQuery = document.getElementById('themeSearch').value;
-    currentPage = 1; // Reset to page 1 for new searches
-    loadThemes(); // Fetch fresh results from the database
+    currentPage = 1; 
+    loadThemes(); 
 }
 
         function goToPage(page) {
