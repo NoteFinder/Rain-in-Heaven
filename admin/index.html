@@ -39,7 +39,6 @@
                 <input type="text" id="desc" placeholder="Description" required>
                 <input type="text" id="imageName" placeholder="Filename (e.g. phola_cozy.jpg)" required>
                 <input type="url" id="tryLink" placeholder="Samsung Trial Link" required>
-                <input type="url" id="buyLink" placeholder="Samsung Buy Link" required>
                 <button type="submit" class="tab-btn active" style="cursor: pointer;">Save Theme to Gallery</button>
             </form>
             <p id="status" style="margin-top:10px; font-weight:bold; color: var(--primary);"></p>
@@ -52,11 +51,7 @@
             </div>
             <table class="admin-table">
                 <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Country</th>
-                        <th>Joined</th>
-                    </tr>
+                    <tr><th>Email</th><th>Country</th><th>Joined</th></tr>
                 </thead>
                 <tbody id="sub-list">
                     <tr><td colspan="3">Loading...</td></tr>
@@ -71,113 +66,78 @@
     </div>
 
     <script>
-        // 1. Password Logic
         function checkPass() {
-            if (document.getElementById('pass').value === "@Rain021603") {
+            if (document.getElementById('pass').value === "021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 loadAdminThemes();
                 loadSubscribers();
-            } else {
-                alert("Wrong Password");
-            }
+            } else { alert("Wrong Password"); }
         }
 
-        // 2. Load Subscribers
         async function loadSubscribers() {
-            try {
-                const res = await fetch('/api/subscribers');
-                const subs = await res.json();
-                window.currentSubs = subs;
-                document.getElementById('sub-list').innerHTML = subs.map(s => `
-                    <tr>
-                        <td>${s.email}</td>
-                        <td>${s.country || 'Global'}</td>
-                        <td>${new Date(s.created_at).toLocaleDateString()}</td>
-                    </tr>
-                `).join('');
-            } catch (err) {
-                console.error("Error loading subscribers:", err);
-            }
+            const res = await fetch('/api/subscribers');
+            const subs = await res.json();
+            window.currentSubs = subs;
+            document.getElementById('sub-list').innerHTML = subs.map(s => `
+                <tr><td>${s.email}</td><td>${s.country || 'Global'}</td><td>${new Date(s.created_at).toLocaleDateString()}</td></tr>
+            `).join('');
         }
 
-        // 3. Load & Delete Themes (Includes Pagination Support)
         async function loadAdminThemes() {
             const list = document.getElementById('admin-theme-list');
             try {
-                // Fetch all themes for management
-                const res = await fetch('/api/themes?limit=100'); 
+                const res = await fetch('/api/themes?limit=100');
                 const data = await res.json();
-                
-                // Fix: Use data.results because the API now returns an object
-                const themes = data.results || data; 
-        
-                if (!themes || themes.length === 0) {
-                    list.innerHTML = '<p style="text-align:center;">No live themes found.</p>';
-                    return;
-                }
-        
+                const themes = data.results || data; // Unpack object
+
                 list.innerHTML = themes.map(t => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee;">
-                        <span><strong>${t.name}</strong> (${t.image})</span>
+                        <span><strong>${t.name}</strong></span>
                         <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:6px 15px; border-radius:15px; cursor:pointer; font-weight:bold;">Delete</button>
                     </div>
                 `).join('');
-            } catch (err) {
-                console.error("Error loading themes:", err);
-                list.innerHTML = '<p style="text-align:center; color:red;">Error loading themes. Check console.</p>';
-            }
+            } catch (err) { list.innerHTML = "Error loading themes."; }
         }
 
         async function deleteTheme(id) {
-            if (confirm("Delete this theme from database?")) {
+            if (confirm("Delete this theme?")) {
                 const res = await fetch('/api/delete', { 
                     method: 'POST', 
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({ id }) 
                 });
                 if (res.ok) loadAdminThemes();
             }
         }
 
-        // 4. Add Theme
         document.getElementById('themeForm').onsubmit = async (e) => {
             e.preventDefault();
             const themeData = {
                 name: document.getElementById('name').value,
                 description: document.getElementById('desc').value,
                 image: document.getElementById('imageName').value,
-                try_link: document.getElementById('tryLink').value,
-                link: document.getElementById('buyLink').value
+                try_link: document.getElementById('tryLink').value
             };
-            const res = await fetch('/api/add', {
+            await fetch('/api/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(themeData)
             });
-            if (res.ok) {
-                document.getElementById('status').innerText = "Theme saved successfully!";
-                e.target.reset();
-                loadAdminThemes();
-            }
+            e.target.reset();
+            loadAdminThemes();
         };
 
-        // 5. CSV Export
         function downloadCSV() {
-            if (!window.currentSubs) return;
             let csv = "Email,Country,Date Joined\n";
-            window.currentSubs.forEach(s => { 
-                csv += `${s.email},${s.country},${s.created_at}\n`; 
-            });
+            window.currentSubs.forEach(s => { csv += `${s.email},${s.country},${s.created_at}\n`; });
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `Rain_In_Heaven_Subscribers_${new Date().toISOString().split('T')[0]}.csv`;
+            a.download = 'subscribers.csv';
             a.click();
         }
     </script>
 </body>
 </html>
-
-
