@@ -18,6 +18,7 @@
 
     <div id="login-box" class="login-container">
         <h2 style="color: var(--primary); font-family: var(--font-heading); margin-bottom: 20px;">Admin Login</h2>
+        <input type="email" id="email" placeholder="Enter Email" style="text-align: center;">
         <input type="password" id="pass" placeholder="Enter Access Code" style="text-align: center;">
         <button onclick="checkPass()" class="tab-btn active" style="width: 100%; margin-top: 15px; cursor: pointer;">Login</button>
     </div>
@@ -67,7 +68,7 @@
 
     <script>
         function checkPass() {
-            if (document.getElementById('pass').value === "@Rain021603") {
+            if (document.getElementById('email').value === "gsebua@gmail.com" && document.getElementById('pass').value === "@Rain021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 loadAdminThemes();
@@ -141,4 +142,5 @@
     </script>
 </body>
 </html>
+
 
