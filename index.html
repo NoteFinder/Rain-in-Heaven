@@ -117,36 +117,60 @@ async function loadThemes() {
     }
 }
 
-    async function loadTagFilters() {
-        try {
-            const res = await fetch('/api/tags');
-            if (!res.ok) return;
-            const tags = await res.json();
-            const bar = document.getElementById('tag-filter-bar');
-            
-            // Clear existing dynamic tags but keep the "All" button
-            const allBtn = bar.querySelector('.tag-filter-btn');
-            bar.innerHTML = ''; 
-            bar.appendChild(allBtn); 
-    
-            tags.forEach(tag => {
-                const btn = document.createElement('button');
-                btn.className = 'tag-filter-btn';
-                btn.textContent = tag;
-                btn.onclick = () => filterByTag(tag, btn);
-                bar.appendChild(btn);
-            });
-        } catch (err) {
-            console.error("Tag API error:", err);
-        }
-    }
+// Load available tags from API
+async function loadTagFilters() {
+    try {
+        const res = await fetch('/api/tags');
+        if (!res.ok) return;
+        const tags = await res.json();
+        const bar = document.getElementById('tag-filter-bar');
+        
+        // Keep the "All" button and clear others
+        const allBtn = bar.querySelector('.tag-filter-btn');
+        bar.innerHTML = ''; 
+        bar.appendChild(allBtn); 
 
+        tags.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.className = 'tag-filter-btn';
+            btn.textContent = tag;
+            btn.onclick = () => filterByTag(tag, btn);
+            bar.appendChild(btn);
+        });
+    } catch (err) {
+        console.error("Tag API error:", err);
+    }
+}
+
+// Function for the tag buttons
 function filterByTag(tag, btn) {
     activeTag = tag;
-    currentPage = 1;
+    currentPage = 1; // Reset to first page
+    
+    // Update active visual state
     document.querySelectorAll('.tag-filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
+    if (btn) {
+        btn.classList.add('active');
+    } else {
+        // If btn is null, find the "All" button
+        document.querySelector('.tag-filter-btn').classList.add('active');
+    }
+    
+    loadThemes(); // Refresh gallery
+}
+
+// Function for clicking tags inside theme cards
+function filterByTagFromCard(tag) {
+    activeTag = tag;
+    currentPage = 1;
+    
+    // Find matching button in the bar to highlight it
+    document.querySelectorAll('.tag-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent.trim() === tag);
+    });
+    
     loadThemes();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function filterByTagFromCard(tag) {
@@ -205,5 +229,6 @@ loadThemes();
     </script>
 </body>
 </html>
+
 
 
