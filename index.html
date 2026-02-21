@@ -117,23 +117,29 @@ async function loadThemes() {
     }
 }
 
-async function loadTagFilters() {
-    try {
-        const res = await fetch('/api/tags');
-        if (!res.ok) return;
-        const tags = await res.json();
-        const bar = document.getElementById('tag-filter-bar');
-        tags.forEach(tag => {
-            const btn = document.createElement('button');
-            btn.className = 'tag-filter-btn';
-            btn.textContent = tag;
-            btn.onclick = () => filterByTag(tag, btn);
-            bar.appendChild(btn);
-        });
-    } catch (err) {
-        // Tags API not set up yet, only "All" button shows
+    async function loadTagFilters() {
+        try {
+            const res = await fetch('/api/tags');
+            if (!res.ok) return;
+            const tags = await res.json();
+            const bar = document.getElementById('tag-filter-bar');
+            
+            // Clear existing dynamic tags but keep the "All" button
+            const allBtn = bar.querySelector('.tag-filter-btn');
+            bar.innerHTML = ''; 
+            bar.appendChild(allBtn); 
+    
+            tags.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'tag-filter-btn';
+                btn.textContent = tag;
+                btn.onclick = () => filterByTag(tag, btn);
+                bar.appendChild(btn);
+            });
+        } catch (err) {
+            console.error("Tag API error:", err);
+        }
     }
-}
 
 function filterByTag(tag, btn) {
     activeTag = tag;
@@ -199,4 +205,5 @@ loadThemes();
     </script>
 </body>
 </html>
+
 
