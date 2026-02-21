@@ -23,6 +23,11 @@
         </div>
     </div>
 
+    <!-- TAG FILTER BAR -->
+    <div id="tag-filter-bar" style="max-width: 1200px; margin: 0 auto 25px; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+        <button class="tag-filter-btn active" onclick="filterByTag('', this)">All</button>
+    </div>
+
     <main class="container">
         <section id="themes" class="tab-content active">
             <div id="themes-gallery" class="gallery">
@@ -62,8 +67,9 @@
     <script>
 const IMG_PATH = "img/";
 let currentPage = 1;
-let searchQuery = ""; 
-const themesPerPage = 8; 
+let searchQuery = "";
+let activeTag = "";
+const themesPerPage = 8;
 
 async function loadThemes() {
     const gallery = document.getElementById('themes-gallery');
@@ -71,7 +77,7 @@ async function loadThemes() {
     
     try {
         const offset = (currentPage - 1) * themesPerPage;
-        const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}&search=${searchQuery}`);
+        const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}&search=${encodeURIComponent(searchQuery)}&tag=${encodeURIComponent(activeTag)}`);
         const data = await res.json();
         
         const themes = data.results || [];
@@ -82,18 +88,22 @@ async function loadThemes() {
             return;
         }
 
-        gallery.innerHTML = themes.map(t => `
+        gallery.innerHTML = themes.map(t => {
+            const tags = t.tags ? t.tags.split(',').filter(tag => tag.trim()) : [];
+            const tagHtml = tags.map(tag => `<span class="theme-tag" onclick="filterByTagFromCard('${tag.trim()}')">${tag.trim()}</span>`).join('');
+            return `
             <div class="card">
                 <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
                 <div class="card-body">
                     <h3>${t.name}</h3>
-                    <p class="theme-desc">${t.description || ''}</p> 
+                    <p class="theme-desc">${t.description || ''}</p>
+                    ${tagHtml ? `<div class="theme-tags">${tagHtml}</div>` : ''}
                     <div class="card-actions">
                         <a href="${t.try_link}" target="_blank" class="btn-small primary" style="width: 100%;">Tap here to try</a>
                     </div>
                 </div>
             </div>
-        `).join('');
+        `}).join('');
 
         const totalPages = Math.ceil(data.total / themesPerPage);
         let btnHtml = '';
@@ -107,62 +117,84 @@ async function loadThemes() {
     }
 }
 
-function filterThemes() {
-    searchQuery = document.getElementById('themeSearch').value;
-    currentPage = 1; 
-    loadThemes(); 
+async function loadTagFilters() {
+    try {
+        const res = await fetch('/api/tags');
+        const tags = await res.json();
+        const bar = document.getElementById('tag-filter-bar');
+        tags.forEach(tag => {
+            const btn = document.createElement('button');
+            btn.className = 'tag-filter-btn';
+            btn.textContent = tag;
+            btn.onclick = () => filterByTag(tag, btn);
+            bar.appendChild(btn);
+        });
+    } catch (err) {
+        console.log('Could not load tags');
+    }
 }
 
-        function goToPage(page) {
-            currentPage = page;
-            loadThemes();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+function filterByTag(tag, btn) {
+    activeTag = tag;
+    currentPage = 1;
+    document.querySelectorAll('.tag-filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    loadThemes();
+}
 
-        function switchTab(event, tabId) {
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+function filterByTagFromCard(tag) {
+    activeTag = tag;
+    currentPage = 1;
+    document.querySelectorAll('.tag-filter-btn').forEach(b => {
+        b.classList.toggle('active', b.textContent === tag);
+    });
+    loadThemes();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        document.getElementById('subscribeForm').onsubmit = async (e) => {
-            e.preventDefault();
-            const payload = {
-                email: document.getElementById('subEmail').value,
-                country: document.getElementById('subCountry').value
-            };
-            const res = await fetch('/api/subscribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (res.ok) { alert("Successfully Subscribed!"); e.target.reset(); }
-        };
+function filterThemes() {
+    searchQuery = document.getElementById('themeSearch').value;
+    currentPage = 1;
+    loadThemes();
+}
 
-        const countries = ["Philippines", "United States", "South Korea", "Japan", "Other"];
-        const select = document.getElementById('subCountry');
-        countries.forEach(c => {
-            const opt = document.createElement('option');
-            opt.value = c; opt.textContent = c;
-            select.appendChild(opt);
-        });
+function goToPage(page) {
+    currentPage = page;
+    loadThemes();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        loadThemes();
+function switchTab(event, tabId) {
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.currentTarget.classList.add('active');
+}
+
+document.getElementById('subscribeForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+        email: document.getElementById('subEmail').value,
+        country: document.getElementById('subCountry').value
+    };
+    const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    if (res.ok) { alert("Successfully Subscribed!"); e.target.reset(); }
+};
+
+const countries = ["Philippines", "United States", "South Korea", "Japan", "Other"];
+const select = document.getElementById('subCountry');
+countries.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    select.appendChild(opt);
+});
+
+loadTagFilters();
+loadThemes();
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
