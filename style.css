@@ -162,58 +162,52 @@
     border-color: var(--primary);
 }
 
-To fix the tag system, we need to ensure the "All" button is styled correctly in your CSS and that the JavaScript is correctly handling the empty tag state to show all themes.
-
-1. Fix the "All" Button Design
-Add the following rules to your style.css file. This will give the tag buttons a consistent design and handle the active state so users know which filter is selected.
-
-CSS
 /* TAG FILTER BAR STYLING */
-/* TAG FILTER BAR STYLING */
+/* TAG SYSTEM */
 .tag-filter-btn {
     padding: 8px 18px;
-    border-radius: 20px;
+    border-radius: 25px;
     border: 2px solid var(--card-border);
     background: white;
     color: var(--primary);
-    font-weight: bold;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
     cursor: pointer;
     transition: 0.3s;
-    font-size: 0.85rem;
 }
 
-.tag-filter-btn:hover {
-    background: var(--card-border);
-}
-
+.tag-filter-btn:hover,
 .tag-filter-btn.active {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
 }
 
-/* THEME TAGS INSIDE CARDS */
 .theme-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
-    margin: 10px 0;
+    gap: 6px;
     justify-content: center;
+    margin: 8px 0 4px;
 }
 
 .theme-tag {
-    font-size: 0.75rem;
-    background: var(--card-border);
-    color: var(--primary);
+    display: inline-block;
     padding: 4px 12px;
-    border-radius: 15px;
+    border-radius: 20px;
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    color: var(--primary);
+    font-size: 0.72rem;
+    font-weight: 700;
     cursor: pointer;
-    font-weight: bold;
     transition: 0.2s;
 }
 
 .theme-tag:hover {
     background: var(--primary);
     color: white;
+    border-color: var(--primary);
 }
 
