@@ -11,24 +11,22 @@
         .admin-table th, .admin-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
         .btn-download { background: #2ecc71; color: white; border: none; padding: 10px 20px; border-radius: 25px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 0.7rem; }
         .login-container { max-width: 400px; margin: 100px auto; text-align: center; padding: 40px; background: white; border-radius: 30px; border: 2px solid var(--card-border); }
-        input[type="text"], input[type="email"], input[type="url"], input[type="password"] { font-family: var(--font-body); width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; box-sizing: border-box; }
-
-        /* Tag Pill UI */
-        .tag-input-wrapper { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card-bg); min-height: 48px; align-items: center; cursor: text; }
+        input[type="text"], input[type="email"], input[type="url"], input[type="password"] { font-family: var(--font-body); width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; box-sizing: border-box; margin-bottom: 10px; }
+        .tag-input-wrapper { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; border: 1px solid var(--card-border); border-radius: 10px; background: var(--card-bg); min-height: 48px; align-items: center; cursor: text; margin-bottom: 10px; }
         .tag-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 20px; background: var(--primary); color: white; font-size: 0.78rem; font-weight: 700; font-family: var(--font-body); }
         .tag-pill .remove-tag { cursor: pointer; font-size: 1rem; line-height: 1; opacity: 0.8; }
         .tag-pill .remove-tag:hover { opacity: 1; }
         .tag-suggestion-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
         .tag-suggestion { padding: 5px 14px; border-radius: 20px; border: 2px solid var(--card-border); background: white; color: var(--primary); font-family: var(--font-body); font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .tag-suggestion:hover, .tag-suggestion.selected { background: var(--primary); color: white; border-color: var(--primary); }
-        #tagTextInput { border: none; outline: none; background: transparent; font-family: var(--font-body); font-size: 0.9rem; min-width: 120px; padding: 4px; }
+        #tagTextInput { border: none !important; outline: none; background: transparent; font-family: var(--font-body); font-size: 0.9rem; min-width: 120px; padding: 4px; margin: 0 !important; width: auto !important; }
     </style>
 </head>
 <body style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
 
     <div id="login-box" class="login-container">
         <h2 style="color: var(--primary); font-family: var(--font-heading); margin-bottom: 20px;">Admin Login</h2>
-        <input type="email" id="email" placeholder="Enter Email" style="text-align: center; margin-bottom: 10px;">
+        <input type="email" id="email" placeholder="Enter Email" style="text-align: center;">
         <input type="password" id="pass" placeholder="Enter Password" style="text-align: center;">
         <button onclick="checkPass()" class="tab-btn active" style="width: 100%; margin-top: 15px; cursor: pointer;">Login</button>
     </div>
@@ -39,6 +37,7 @@
             <a href="../" style="text-decoration: none; color: var(--primary); font-weight: bold; border: 2px solid var(--primary); padding: 8px 20px; border-radius: 25px;">← Return to Site</a>
         </div>
 
+        <!-- ADD NEW THEME -->
         <div class="admin-section">
             <h3 style="color: var(--primary); font-family: var(--font-heading);">Add New Theme</h3>
             <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">
@@ -55,9 +54,9 @@
                 <div>
                     <label style="font-size: 0.85rem; font-weight: 700; color: var(--dark); display: block; margin-bottom: 6px;">Tags</label>
                     <div class="tag-input-wrapper" id="tagInputWrapper" onclick="document.getElementById('tagTextInput').focus()">
-                        <input type="text" id="tagTextInput" placeholder="Type & press Enter to add...">
+                        <input type="text" id="tagTextInput" placeholder="Type & press Enter...">
                     </div>
-                    <p style="font-size: 0.75rem; color: #999; margin: 6px 0 8px;">Quick add:</p>
+                    <p style="font-size: 0.75rem; color: #999; margin: 4px 0 8px;">Click to quick-add:</p>
                     <div class="tag-suggestion-list" id="tagSuggestions"></div>
                 </div>
 
@@ -66,32 +65,30 @@
             <p id="status" style="margin-top:10px; font-weight:bold; color: var(--primary);"></p>
         </div>
 
-        <!-- MANAGE TAGS SECTION -->
+        <!-- MANAGE TAGS -->
         <div class="admin-section">
-            <h3 style="color: var(--primary); font-family: var(--font-heading);">Manage Available Tags</h3>
-            <p style="font-size: 0.8rem; color: #666;">Add or remove tags that appear as suggestions when creating themes.</p>
+            <h3 style="color: var(--primary); font-family: var(--font-heading);">Manage Tags</h3>
+            <p style="font-size: 0.8rem; color: #666;">These tags appear as quick-add options when creating themes, and as filter buttons on the public site.</p>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <input type="text" id="newTagInput" placeholder="New tag name..." style="flex: 1;">
-                <button onclick="addGlobalTag()" class="tab-btn active" style="cursor: pointer; white-space: nowrap;">+ Add Tag</button>
+                <input type="text" id="newTagInput" placeholder="New tag name..." style="flex: 1; margin: 0;">
+                <button onclick="addGlobalTag()" class="tab-btn active" style="cursor: pointer; white-space: nowrap; width: auto;">+ Add Tag</button>
             </div>
             <div id="globalTagList" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px;"></div>
         </div>
 
+        <!-- SUBSCRIBERS -->
         <div class="admin-section">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 style="color: var(--primary); font-family: var(--font-heading);">Newsletter Subscribers</h3>
                 <button onclick="downloadCSV()" class="btn-download">Download CSV</button>
             </div>
             <table class="admin-table">
-                <thead>
-                    <tr><th>Email</th><th>Country</th><th>Joined</th></tr>
-                </thead>
-                <tbody id="sub-list">
-                    <tr><td colspan="3">Loading...</td></tr>
-                </tbody>
+                <thead><tr><th>Email</th><th>Country</th><th>Joined</th></tr></thead>
+                <tbody id="sub-list"><tr><td colspan="3">Loading...</td></tr></tbody>
             </table>
         </div>
 
+        <!-- LIVE THEMES -->
         <div class="admin-section">
             <h3 style="color: var(--primary); font-family: var(--font-heading);">Live Themes</h3>
             <div id="admin-theme-list">Loading...</div>
@@ -99,18 +96,13 @@
     </div>
 
     <script>
-        // ===== TAG STATE =====
         let selectedTags = [];
         let availableTags = [];
 
-        // Default preset tags (also loaded from API)
-        const DEFAULT_TAGS = ["Dark", "Light", "Valentine's Day", "Winter", "Summer", "Floral", "Minimal", "Aesthetic", "Christmas", "Nature", "Pastel", "Cute"];
-
+        // ===== TAG PILL UI =====
         function renderTagPills() {
             const wrapper = document.getElementById('tagInputWrapper');
-            // Remove old pills
             wrapper.querySelectorAll('.tag-pill').forEach(p => p.remove());
-            // Add pills for selected tags
             selectedTags.forEach(tag => {
                 const pill = document.createElement('span');
                 pill.className = 'tag-pill';
@@ -128,18 +120,18 @@
                 btn.type = 'button';
                 btn.className = 'tag-suggestion' + (selectedTags.includes(tag) ? ' selected' : '');
                 btn.textContent = tag;
-                btn.onclick = () => toggleSuggestionTag(tag);
+                btn.onclick = () => toggleTag(tag);
                 container.appendChild(btn);
             });
         }
 
-        function toggleSuggestionTag(tag) {
+        function toggleTag(tag) {
             if (selectedTags.includes(tag)) {
-                removeTag(tag);
+                selectedTags = selectedTags.filter(t => t !== tag);
             } else {
                 selectedTags.push(tag);
-                renderTagPills();
             }
+            renderTagPills();
         }
 
         function removeTag(tag) {
@@ -151,13 +143,11 @@
             const input = document.getElementById('tagTextInput');
             if (input) {
                 input.addEventListener('keydown', (e) => {
-                    if ((e.key === 'Enter' || e.key === ',') && input.value.trim()) {
+                    if (e.key === 'Enter' && input.value.trim()) {
                         e.preventDefault();
-                        const newTag = input.value.trim().replace(/,$/, '');
-                        if (newTag && !selectedTags.includes(newTag)) {
-                            selectedTags.push(newTag);
-                            renderTagPills();
-                        }
+                        const newTag = input.value.trim();
+                        if (!selectedTags.includes(newTag)) selectedTags.push(newTag);
+                        renderTagPills();
                         input.value = '';
                     }
                 });
@@ -168,9 +158,10 @@
         async function loadGlobalTags() {
             try {
                 const res = await fetch('/api/tags');
-                availableTags = await res.json();
+                if (res.ok) availableTags = await res.json();
+                else availableTags = [];
             } catch (err) {
-                availableTags = [...DEFAULT_TAGS];
+                availableTags = [];
             }
             renderSuggestions();
             renderGlobalTagList();
@@ -179,6 +170,10 @@
         function renderGlobalTagList() {
             const container = document.getElementById('globalTagList');
             if (!container) return;
+            if (availableTags.length === 0) {
+                container.innerHTML = '<p style="font-size:0.8rem;color:#999;">No tags yet. Add some above!</p>';
+                return;
+            }
             container.innerHTML = '';
             availableTags.forEach(tag => {
                 const pill = document.createElement('span');
@@ -191,32 +186,40 @@
         async function addGlobalTag() {
             const input = document.getElementById('newTagInput');
             const tag = input.value.trim();
-            if (!tag || availableTags.includes(tag)) { input.value = ''; return; }
-            await fetch('/api/tags', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tag })
-            });
-            availableTags.push(tag);
-            input.value = '';
-            renderGlobalTagList();
-            renderSuggestions();
+            if (!tag) return;
+            if (availableTags.includes(tag)) { alert('Tag already exists!'); return; }
+            try {
+                await fetch('/api/tags', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tag })
+                });
+                availableTags.push(tag);
+                availableTags.sort();
+                input.value = '';
+                renderGlobalTagList();
+                renderSuggestions();
+            } catch (err) { alert('Error adding tag'); }
         }
 
         async function deleteGlobalTag(tag) {
-            await fetch('/api/tags', {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ tag })
-            });
-            availableTags = availableTags.filter(t => t !== tag);
-            renderGlobalTagList();
-            renderSuggestions();
+            if (!confirm(`Delete tag "${tag}"?`)) return;
+            try {
+                await fetch('/api/tags', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tag })
+                });
+                availableTags = availableTags.filter(t => t !== tag);
+                renderGlobalTagList();
+                renderSuggestions();
+            } catch (err) { alert('Error deleting tag'); }
         }
 
         // ===== AUTH =====
         function checkPass() {
-            if (document.getElementById('email').value === "contact@raininheaven.com" && document.getElementById('pass').value === "@Rain021603") {
+            if (document.getElementById('email').value === "contact@raininheaven.com" &&
+                document.getElementById('pass').value === "@Rain021603") {
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
                 loadGlobalTags();
@@ -242,17 +245,18 @@
                 const res = await fetch('/api/themes?limit=100');
                 const data = await res.json();
                 const themes = data.results || data;
-
                 list.innerHTML = themes.map(t => {
                     const tags = t.tags ? t.tags.split(',').filter(x => x.trim()) : [];
-                    const tagBadges = tags.map(tag => `<span style="padding:3px 10px;border-radius:15px;background:var(--bg);border:1px solid var(--card-border);font-size:0.72rem;color:var(--primary);font-weight:700;">${tag.trim()}</span>`).join('');
+                    const tagBadges = tags.map(tag =>
+                        `<span style="padding:3px 10px;border-radius:15px;background:var(--bg);border:1px solid var(--card-border);font-size:0.72rem;color:var(--primary);font-weight:700;">${tag.trim()}</span>`
+                    ).join('');
                     return `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; border-bottom:1px solid #eee; gap:10px; flex-wrap:wrap;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid #eee;gap:10px;flex-wrap:wrap;">
                         <div>
                             <strong>${t.name}</strong>
-                            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;">${tagBadges}</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;">${tagBadges || '<span style="font-size:0.75rem;color:#999;">No tags</span>'}</div>
                         </div>
-                        <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d; color:white; border:none; padding:6px 15px; border-radius:15px; cursor:pointer; font-weight:bold;">Delete</button>
+                        <button onclick="deleteTheme(${t.id})" style="background:#ff4d4d;color:white;border:none;padding:6px 15px;border-radius:15px;cursor:pointer;font-weight:bold;">Delete</button>
                     </div>`;
                 }).join('');
             } catch (err) { list.innerHTML = "Error loading themes."; }
@@ -260,10 +264,10 @@
 
         async function deleteTheme(id) {
             if (confirm("Delete this theme?")) {
-                const res = await fetch('/api/delete', { 
-                    method: 'POST', 
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ id }) 
+                const res = await fetch('/api/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id })
                 });
                 if (res.ok) loadAdminThemes();
             }
@@ -276,7 +280,7 @@
                 description: document.getElementById('desc').value,
                 image: document.getElementById('imageName').value,
                 try_link: document.getElementById('tryLink').value,
-                tags: selectedTags.join(',')  // Send tags as comma-separated string
+                tags: selectedTags.join(',')
             };
             const res = await fetch('/api/add', {
                 method: 'POST',
@@ -290,6 +294,9 @@
                 renderTagPills();
                 e.target.reset();
                 loadAdminThemes();
+            } else {
+                const err = await res.json();
+                document.getElementById('status').textContent = '✗ Error: ' + (err.error || 'Unknown error');
             }
         };
 
@@ -299,9 +306,7 @@
             const blob = new Blob([csv], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'subscribers.csv';
-            a.click();
+            a.href = url; a.download = 'subscribers.csv'; a.click();
         }
     </script>
 </body>
