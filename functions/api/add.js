@@ -1,4 +1,3 @@
-// functions/api/add.js
 export async function onRequestPost(context) {
   const { env, request } = context;
   try {
@@ -10,6 +9,9 @@ export async function onRequestPost(context) {
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (err) {
-    return new Response(err.message, { status: 500 });
+    return new Response(JSON.stringify({ error: err.message, stack: err.stack }), { 
+      status: 500,
+      headers: { "Content-Type": "application/json" }
+    });
   }
 }
