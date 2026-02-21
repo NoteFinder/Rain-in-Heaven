@@ -114,3 +114,50 @@
     color: white;
     border-color: var(--primary);
 }
+
+.tag-filter-btn {
+    padding: 8px 18px;
+    border-radius: 25px;
+    border: 2px solid var(--card-border);
+    background: white;
+    color: var(--primary);
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tag-filter-btn:hover,
+.tag-filter-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.theme-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin: 8px 0 4px;
+}
+
+.theme-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    color: var(--primary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.theme-tag:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
