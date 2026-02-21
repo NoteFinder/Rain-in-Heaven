@@ -169,6 +169,7 @@ Add the following rules to your style.css file. This will give the tag buttons a
 
 CSS
 /* TAG FILTER BAR STYLING */
+/* TAG FILTER BAR STYLING */
 .tag-filter-btn {
     padding: 8px 18px;
     border-radius: 20px;
@@ -197,19 +198,22 @@ CSS
     flex-wrap: wrap;
     gap: 5px;
     margin: 10px 0;
+    justify-content: center;
 }
 
 .theme-tag {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     background: var(--card-border);
     color: var(--primary);
-    padding: 3px 10px;
-    border-radius: 12px;
+    padding: 4px 12px;
+    border-radius: 15px;
     cursor: pointer;
     font-weight: bold;
+    transition: 0.2s;
 }
 
 .theme-tag:hover {
     background: var(--primary);
     color: white;
 }
+
