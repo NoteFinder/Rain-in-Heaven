@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Designed Creations by Rain in Heaven</title>
+    <title>Designed Creation by Rain in Heaven</title>
     <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,9 +16,8 @@
             <button class="tab-btn active" onclick="switchTab(event, 'themes')">Themes</button>
             <button class="tab-btn" onclick="switchTab(event, 'home')">About</button>
         </nav>
-        
         <div class="search-box" style="flex-grow: 1; max-width: 300px;">
-            <input type="text" id="themeSearch" placeholder="Search themes..." onkeyup="filterThemes()" 
+            <input type="text" id="themeSearch" placeholder="Search themes..." onkeyup="filterThemes()"
                    style="width: 100%; padding: 10px 20px; border-radius: 25px; border: 2px solid var(--card-border); outline: none; font-family: var(--font-body);">
         </div>
     </div>
@@ -74,12 +73,11 @@ const themesPerPage = 8;
 async function loadThemes() {
     const gallery = document.getElementById('themes-gallery');
     const pagination = document.getElementById('pagination-numbers');
-    
+
     try {
         const offset = (currentPage - 1) * themesPerPage;
         const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}&search=${encodeURIComponent(searchQuery)}&tag=${encodeURIComponent(activeTag)}`);
         const data = await res.json();
-        
         const themes = data.results || [];
 
         if (themes.length === 0) {
@@ -90,7 +88,9 @@ async function loadThemes() {
 
         gallery.innerHTML = themes.map(t => {
             const tags = t.tags ? t.tags.split(',').filter(tag => tag.trim()) : [];
-            const tagHtml = tags.map(tag => `<span class="theme-tag" onclick="filterByTagFromCard('${tag.trim()}')">${tag.trim()}</span>`).join('');
+            const tagHtml = tags.map(tag =>
+                `<span class="theme-tag" onclick="filterByTagFromCard('${tag.trim()}')">${tag.trim()}</span>`
+            ).join('');
             return `
             <div class="card">
                 <div class="card-img" style="background-image: url('${IMG_PATH}${t.image}')"></div>
@@ -102,8 +102,8 @@ async function loadThemes() {
                         <a href="${t.try_link}" target="_blank" class="btn-small primary" style="width: 100%;">Tap here to try</a>
                     </div>
                 </div>
-            </div>
-        `}).join('');
+            </div>`;
+        }).join('');
 
         const totalPages = Math.ceil(data.total / themesPerPage);
         let btnHtml = '';
@@ -120,6 +120,7 @@ async function loadThemes() {
 async function loadTagFilters() {
     try {
         const res = await fetch('/api/tags');
+        if (!res.ok) return;
         const tags = await res.json();
         const bar = document.getElementById('tag-filter-bar');
         tags.forEach(tag => {
@@ -130,7 +131,7 @@ async function loadTagFilters() {
             bar.appendChild(btn);
         });
     } catch (err) {
-        console.log('Could not load tags');
+        // Tags API not set up yet, only "All" button shows
     }
 }
 
@@ -198,4 +199,3 @@ loadThemes();
     </script>
 </body>
 </html>
-
