@@ -1,264 +1,116 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:ital,wght@0,700;1,400&family=Dancing+Script:wght@700&display=swap');
-
-
-
-:root {
-
-    --primary: #f8a5c2; 
-
-    --accent: #ffb6c1; 
-
-    --dark: #333333;
-
-    --light: #a0a0a0;
-
-    --bg: #fff0f5; 
-
-    --card-bg: #fff9fb;
-
-    --card-border: #fce4ec;
-
-    --font-heading: 'Playfair Display', serif;
-
-    --font-body: 'Montserrat', sans-serif;
-
-    --font-script: 'Dancing Script', cursive;
-
-}
-
-
-
-body {
-
-    font-family: var(--font-body);
-
-    margin: 0; padding: 0;
-
-    background-color: var(--bg);
-
-    color: var(--dark);
-
-    line-height: 1.6;
-
-}
-
-
-
-/* HERO SECTION */
-
-.hero {
-
-    height: 65vh; min-height: 500px;
-
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('img/background.jpg') center/cover fixed;
-
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-
-    color: white; text-align: center;
-
-}
-
-.hero-logo { width: 260px; height: auto; margin-bottom: 10px; }
-
-.hero h2 { font-size: 1.4rem; letter-spacing: 5px; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-
-
-/* NAVIGATION TABS */
-
-.nav-wrapper { max-width: 500px; margin: -35px auto 40px; position: relative; z-index: 100; }
-
-.tabs { background: var(--card-bg); display: flex; justify-content: space-around; padding: 8px; border-radius: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-
-.tab-btn { border: none; background: none; padding: 12px 25px; font-weight: 700; color: var(--primary); cursor: pointer; border-radius: 40px; transition: 0.3s; font-family: var(--font-body); }
-
-.tab-btn.active { background: var(--primary); color: white; }
-
-
-
-.tab-content { display: none; }
-
-.tab-content.active { display: block; }
-
-
-
-/* UNIFORM HEADERS (About, Rain Justin, Designer, Subscribe) */
-
-.about-card h2, 
-
-.about-card h3:not(.maker-name), 
-
-.subscribe-section h2 {
-
-    font-family: var(--font-heading) !important;
-
-    font-size: 2.2rem !important;
-
-    color: var(--primary) !important;
-
-    margin: 20px 0;
-
-    font-weight: 700;
-
-}
-
-
-
-/* SPECIAL STYLE FOR YOUR NAME */
-
-.maker-name {
-
-    font-family: var(--font-body) !important;
-
-    font-size: 1.4rem !important; /* Smaller size */
-
-    color: #000000 !important; /* Black color */
-
-    font-weight: 700;
-
-    margin: 5px 0 15px 0 !important;
-
-    text-transform: none !important;
-
-}
-
-
-
-/* ABOUT CARD & CONTENT */
-
-.about-card { background: var(--card-bg); padding: 50px 30px; border-radius: 35px; border: 2px solid var(--card-border); text-align: center; max-width: 800px; margin: 0 auto; }
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-
-
-
-.social-links { display: flex; justify-content: center; align-items: center; gap: 25px; margin: 30px 0; }
-
-.social-icon { width: 55px; height: 55px; transition: 0.3s ease; }
-
-.social-icon:hover { transform: scale(1.1); }
-
-
-
-/* SUBSCRIBE FORM */
-
-.subscribe-section { background-color: white; padding: 40px; border: 1px solid var(--card-border); border-radius: 25px; margin-top: 50px; text-align: left; }
-
-.sub-input { font-family: var(--font-body); width: 100%; padding: 12px; border: 1px solid var(--card-border); border-radius: 10px; margin-bottom: 15px; background: var(--card-bg); box-sizing: border-box; }
-
-.btn-subscribe { font-family: var(--font-body); font-weight: 700; background: var(--dark); color: white; border: none; padding: 15px 40px; border-radius: 30px; cursor: pointer; text-transform: uppercase; display: block; margin: 20px auto 0; transition: 0.3s; }
-
-.btn-subscribe:hover { background: var(--primary); }
-
-
-
-/* GALLERY */
-
-.gallery {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 per row on mobile */
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
-}
-.card { background: var(--card-bg); border-radius: 25px; overflow: hidden; transition: 0.4s; border: 2px solid var(--card-border); display: flex; flex-direction: column; }
-
-.card-img {
-    width: 100%;
-    aspect-ratio: 9 / 16;
-    background-size: cover;
-    background-position: center;
-    border-radius: 15px 15px 0 0;
-}
-.card-body h3 { font-size: 1.2rem !important; margin: 10px 0 !important; }
-
-/* Card Body and Action Container */
-.card-body {
-    padding: 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.card-actions {
-    display: flex;
-    gap: 10px; /* Space between the two buttons */
-    margin-top: 15px;
-    width: 100%;
-}
-
-/* Button Styling */
-.btn-small {
-    flex: 1; /* This makes both buttons take up equal 50/50 width */
-    padding: 12px 0; /* Vertical padding for better height */
-    border-radius: 30px; /* Rounded pill shape from your design */
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.85rem;
-    text-align: center;
-    border: 2px solid var(--primary);
-    color: var(--primary);
-    transition: 0.3s;
-}
-
-.btn-small.primary {
-    background: var(--primary);
-    color: white;
-}
-
-@media (min-width: 1024px) {
-    .gallery {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 25px;
-    }
-}
-
-/* Page Number Styling */
-#pagination-numbers {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 40px;
-}
-
-#pagination-numbers button {
-    padding: 8px 16px;
+/* ===== TAG SYSTEM ADDITIONS — Add these to the bottom of style.css ===== */
+
+/* Tag filter bar (above gallery) */
+.tag-filter-btn {
+    padding: 8px 18px;
+    border-radius: 25px;
     border: 2px solid var(--card-border);
     background: white;
     color: var(--primary);
-    border-radius: 12px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
     cursor: pointer;
-    font-weight: bold;
     transition: 0.3s;
+    white-space: nowrap;
 }
 
-#pagination-numbers button.active {
+.tag-filter-btn:hover,
+.tag-filter-btn.active {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
 }
 
-/* Navigation Wrapper Adjustments */
-.nav-wrapper {
-    margin: -35px auto 40px;
-    z-index: 100;
+/* Tags shown on each theme card */
+.theme-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    margin: 8px 0 4px;
 }
 
-#themeSearch:focus {
+.theme-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: var(--bg);
+    border: 1.5px solid var(--card-border);
+    color: var(--primary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.theme-tag:hover {
+    background: var(--primary);
+    color: white;
     border-color: var(--primary);
-    box-shadow: 0 0 8px rgba(248, 165, 194, 0.3);
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 600px) {
-    .nav-wrapper {
-        flex-direction: column;
-        gap: 10px;
-        margin-top: -50px;
-    }
-    .search-container {
-        width: 100%;
-    }
+/* Admin tag input area */
+.tag-input-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    background: var(--card-bg);
+    min-height: 48px;
+    align-items: center;
+    cursor: text;
 }
 
+.tag-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: var(--primary);
+    color: white;
+    font-size: 0.78rem;
+    font-weight: 700;
+    font-family: var(--font-body);
+}
+
+.tag-pill .remove-tag {
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.8;
+}
+
+.tag-pill .remove-tag:hover {
+    opacity: 1;
+}
+
+.tag-suggestion-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tag-suggestion {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 2px solid var(--card-border);
+    background: white;
+    color: var(--primary);
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tag-suggestion:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
