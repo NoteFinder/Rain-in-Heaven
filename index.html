@@ -22,10 +22,14 @@
         </div>
     </div>
 
-    <!-- TAG FILTER BAR -->
-    <div id="tag-filter-bar" style="max-width: 1200px; margin: 0 auto 25px; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-        <button class="tag-filter-btn active" onclick="filterByTag('', this)">All</button>
+    <!-- TAG CONTROLS -->
+    <div style="text-align: center; margin-bottom: 10px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="tag-filter-btn active" onclick="filterByTag('', this)" id="allTagBtn">All</button>
+        <button class="tag-filter-btn" onclick="toggleTagBar(this)" id="filterToggleBtn">🏷️ Filter Tags</button>
     </div>
+
+    <!-- TAG FILTER BAR (hidden by default) -->
+    <div id="tag-filter-bar"></div>
 
     <main class="container">
         <section id="themes" class="tab-content active">
@@ -73,7 +77,6 @@ const themesPerPage = 8;
 async function loadThemes() {
     const gallery = document.getElementById('themes-gallery');
     const pagination = document.getElementById('pagination-numbers');
-
     try {
         const offset = (currentPage - 1) * themesPerPage;
         const res = await fetch(`/api/themes?limit=${themesPerPage}&offset=${offset}&search=${encodeURIComponent(searchQuery)}&tag=${encodeURIComponent(activeTag)}`);
@@ -117,19 +120,13 @@ async function loadThemes() {
     }
 }
 
-// Load available tags from API
 async function loadTagFilters() {
     try {
         const res = await fetch('/api/tags');
         if (!res.ok) return;
         const tags = await res.json();
         const bar = document.getElementById('tag-filter-bar');
-        
-        // Keep the "All" button and clear others
-        const allBtn = bar.querySelector('.tag-filter-btn');
-        bar.innerHTML = ''; 
-        bar.appendChild(allBtn); 
-
+        bar.innerHTML = '';
         tags.forEach(tag => {
             const btn = document.createElement('button');
             btn.className = 'tag-filter-btn';
@@ -138,44 +135,36 @@ async function loadTagFilters() {
             bar.appendChild(btn);
         });
     } catch (err) {
-        console.error("Tag API error:", err);
+        // silently fail
     }
 }
 
-// Function for the tag buttons
+function toggleTagBar(btn) {
+    const bar = document.getElementById('tag-filter-bar');
+    const isVisible = bar.style.display === 'flex';
+    bar.style.display = isVisible ? 'none' : 'flex';
+    btn.textContent = isVisible ? '🏷️ Filter Tags' : '✕ Close Filters';
+    btn.classList.toggle('active', !isVisible);
+}
+
 function filterByTag(tag, btn) {
     activeTag = tag;
-    currentPage = 1; // Reset to first page
-    
-    // Update active visual state
+    currentPage = 1;
     document.querySelectorAll('.tag-filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) {
-        btn.classList.add('active');
-    } else {
-        // If btn is null, find the "All" button
-        document.querySelector('.tag-filter-btn').classList.add('active');
-    }
-    
-    loadThemes(); // Refresh gallery
-}
-
-// Function for clicking tags inside theme cards
-function filterByTagFromCard(tag) {
-    activeTag = tag;
-    currentPage = 1;
-    
-    // Find matching button in the bar to highlight it
-    document.querySelectorAll('.tag-filter-btn').forEach(b => {
-        b.classList.toggle('active', b.textContent.trim() === tag);
-    });
-    
+    if (btn) btn.classList.add('active');
+    // Also mark All btn active if clearing filter
+    if (!tag) document.getElementById('allTagBtn').classList.add('active');
     loadThemes();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function filterByTagFromCard(tag) {
     activeTag = tag;
     currentPage = 1;
+    // Open the tag bar and highlight the matching tag
+    const bar = document.getElementById('tag-filter-bar');
+    bar.style.display = 'flex';
+    document.getElementById('filterToggleBtn').textContent = '✕ Close Filters';
+    document.getElementById('filterToggleBtn').classList.add('active');
     document.querySelectorAll('.tag-filter-btn').forEach(b => {
         b.classList.toggle('active', b.textContent === tag);
     });
@@ -229,6 +218,3 @@ loadThemes();
     </script>
 </body>
 </html>
-
-
-
