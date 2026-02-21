@@ -1,0 +1,39 @@
+// functions/api/tags.js
+// This endpoint manages the global list of available tags stored in D1.
+// Run this SQL first to create the table:
+// CREATE TABLE IF NOT EXISTS tags (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE NOT NULL);
+// INSERT OR IGNORE INTO tags (name) VALUES ('Dark'),('Light'),('Valentine\'s Day'),('Winter'),('Summer'),('Floral'),('Minimal'),('Aesthetic'),('Christmas'),('Nature'),('Pastel'),('Cute');
+
+export async function onRequest(context) {
+  const { env, request } = context;
+  const method = request.method;
+
+  try {
+    if (method === 'GET') {
+      // Return all tag names as a simple array
+      const result = await env.DB.prepare("SELECT name FROM tags ORDER BY name ASC").all();
+      const tags = result.results.map(r => r.name);
+      return new Response(JSON.stringify(tags), {
+        headers: { "Content-Type": "application/json" }
+      });
+
+    } else if (method === 'POST') {
+      // Add a new tag
+      const { tag } = await request.json();
+      if (!tag) return new Response("Missing tag", { status: 400 });
+      await env.DB.prepare("INSERT OR IGNORE INTO tags (name) VALUES (?)").bind(tag).run();
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+
+    } else if (method === 'DELETE') {
+      // Remove a tag
+      const { tag } = await request.json();
+      if (!tag) return new Response("Missing tag", { status: 400 });
+      await env.DB.prepare("DELETE FROM tags WHERE name = ?").bind(tag).run();
+      return new Response(JSON.stringify({ success: true }), { status: 200 });
+    }
+
+    return new Response("Method not allowed", { status: 405 });
+  } catch (err) {
+    return new Response(err.message, { status: 500 });
+  }
+}
